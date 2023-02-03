@@ -123,6 +123,85 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &57534380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 57534384}
+  - component: {fileID: 57534383}
+  - component: {fileID: 57534382}
+  - component: {fileID: 57534381}
+  m_Layer: 0
+  m_Name: RoomStateTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &57534381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57534380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c98a09dee3578447a0cb1d71974f890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &57534382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57534380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac6db782555bb74d85f9ba25c705c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  tracker: {fileID: 57534383}
+--- !u!114 &57534383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57534380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea4efc5fc104ca4aa33c68c9a02a69f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomStartBoundary: {x: -19, y: -19}
+  roomEndBoundary: {x: 19, y: 19}
+  scanDensity: 20
+  scanner: {fileID: 57534382}
+  textureGenerator: {fileID: 57534381}
+--- !u!4 &57534384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57534380}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &81010763
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,6 +757,7 @@ MonoBehaviour:
   input: {fileID: 1980117360}
   maxPowerAfterSeconds: 1
   powerIndicator: {fileID: 1396005378}
+  roomStateTracker: {fileID: 57534383}
   playerMesh: {fileID: 429622347}
   projectile: {fileID: 1002840191}
   groundLayermask:
