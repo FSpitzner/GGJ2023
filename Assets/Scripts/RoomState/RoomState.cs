@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RoomState
+namespace DNA
 {
-    EMPTY,
-    CLEAN_FLOOR,
-    OVERGROWN_FLOOR,
-    WALL
+    public enum RoomState
+    {
+        EMPTY,
+        CLEAN_FLOOR,
+        OVERGROWN_FLOOR,
+        WALL
+    }
 }

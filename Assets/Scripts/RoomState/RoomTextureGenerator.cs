@@ -12,7 +12,7 @@ namespace DNA
         private Texture2D texture;
         #endregion
 
-        public Texture2D GenerateTexture(RoomState[,] roomState)
+        public void GenerateTexture(RoomState[,] roomState)
         {
             // Create empty texture with dimensions matching the state array:
             texture = new Texture2D(roomState.GetLength(0), roomState.GetLength(1), TextureFormat.RGB24, false);
@@ -27,26 +27,36 @@ namespace DNA
                 }
             }
 
-            // Write texture to file:
+            // Write texture to file for debug purposes:
             WriteToFile();
+        }
 
-            return null;
+        public void UpdateTexture(int x, int y, RoomState state)
+        {
+            // Update pixel at given position:
+            texture.SetPixel(x, y, CalculateStateColor(state));
+
+            // Write texture to file for debug purposes:
+            WriteToFile();
         }
 
         private Color CalculateStateColor(RoomState state)
         {
+            // Red channel: 0 = floor; 255 = wall or nothing
+            // Green channel: 0 = clean floor; 255 = overgrown floor
+
             switch (state)
             {
                 case RoomState.EMPTY:
-                    return Color.black;
+                    return Color.red;
                 case RoomState.CLEAN_FLOOR:
                     return Color.black;
                 case RoomState.OVERGROWN_FLOOR:
-                    return Color.white;
+                    return Color.green;
                 case RoomState.WALL:
                     return Color.red;
                 default:
-                    return Color.black;
+                    return Color.red;
             }
         }
 

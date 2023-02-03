@@ -7,50 +7,43 @@ namespace DNA
     public class RoomScanner : MonoBehaviour
     {
         #region Inspector Variables
+        
         [Header("Settings")]
-        [SerializeField]
-        private Vector2 scanStartPoint = Vector2.zero;
-        [SerializeField]
-        private Vector2 scanEndPoint = Vector2.zero;
-        [SerializeField]
-        [Tooltip("Number of scan points per unit")]
-        [Min(1)]
-        private int scanDensity = 1;
         [SerializeField]
         private LayerMask scanLayers;
 
         [Header("References")]
         [SerializeField]
         private RoomStateTracker tracker;
-        [SerializeField]
-        private RoomTextureGenerator textureGenerator;
         #endregion
 
         #region Internal Variables
         private int floorLayer;
         private int wallLayer;
+
+        Vector2 scanStartPoint;
+        Vector2 scanEndPoint;
+        int scanDensity;
         #endregion
 
-        #region Setup
+        #region Scan
 
-        private void Start()
+        public RoomState[,] ScanRoom()
         {
             // Get layer index by name:
             floorLayer = LayerMask.NameToLayer("Floor");
             wallLayer = LayerMask.NameToLayer("Wall");
 
-            ScanRoom();
-        }
+            // Get scan settings from RoomStateTracker:
+            scanStartPoint = tracker.RoomStartBoundary;
+            scanEndPoint = tracker.RoomEndBoundary;
+            scanDensity = tracker.StateDensity;
 
-        private void ScanRoom()
-        {
             // Calculate room size:
             Vector2 roomSize = new Vector2(Mathf.Max(scanEndPoint.x - scanStartPoint.x, 0f), Mathf.Max(scanEndPoint.y - scanStartPoint.y, 0f));
-            Debug.Log("Room Size: " + roomSize);
 
             // Calculate number of scans per row/column:
             Vector2Int numberOfScans = new Vector2Int(Mathf.CeilToInt(roomSize.x) * scanDensity, Mathf.CeilToInt(roomSize.y) * scanDensity);
-            Debug.Log("Number of Scans: " + numberOfScans);
 
             // Create state array:
             RoomState[,] states = new RoomState[numberOfScans.x, numberOfScans.y];
@@ -65,9 +58,7 @@ namespace DNA
                 }
             }
 
-            // Output room texture to file:
-            if (textureGenerator != null)
-                textureGenerator.GenerateTexture(states);
+            return states;
         }
 
         private RoomState Scan(int x, int y)

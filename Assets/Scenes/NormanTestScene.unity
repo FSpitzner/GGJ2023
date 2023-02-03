@@ -408,14 +408,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac6db782555bb74d85f9ba25c705c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scanStartPoint: {x: -10, y: -5}
-  scanEndPoint: {x: 10, y: 5}
-  scanDensity: 10
   scanLayers:
     serializedVersion: 2
     m_Bits: 192
   tracker: {fileID: 1184865946}
-  textureGenerator: {fileID: 1184865947}
 --- !u!4 &1184865945
 Transform:
   m_ObjectHideFlags: 0
@@ -443,6 +439,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea4efc5fc104ca4aa33c68c9a02a69f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomStartBoundary: {x: -10, y: -5}
+  roomEndBoundary: {x: 10, y: 5}
+  scanDensity: 20
+  scanner: {fileID: 1184865943}
+  textureGenerator: {fileID: 1184865947}
 --- !u!114 &1184865947
 MonoBehaviour:
   m_ObjectHideFlags: 0
