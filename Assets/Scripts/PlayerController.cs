@@ -12,13 +12,25 @@ namespace DNA
         [SerializeField] InputWrapper input = null;
         [SerializeField] float maxPowerAfterSeconds = 2f;
         [SerializeField] Image powerIndicator = null;
+        [SerializeField] RoomStateTracker roomStateTracker = null;
 
+        [SerializeField] GameObject playerMesh = null;
+        [SerializeField] GameObject projectile = null;
+        [SerializeField] LayerMask groundLayermask = 0;
+
+        private Transform owntransform = null;
         private Vector3 direction = new Vector3();
         private float powerTimer = 0f;
+        private Transform projectileTransform = null;
+        private Ray groundRay;
+        private RaycastHit hit;
 
         private void Start()
         {
             UpdateIndicator(0f);
+            owntransform = transform;
+            projectileTransform = projectile.transform;
+            groundRay = new Ray(projectileTransform.position, Vector3.down);
         }
 
         void Update()
@@ -44,6 +56,8 @@ namespace DNA
 
         void Jump(Vector3 direction, float power)
         {
+            projectile.SetActive(true);
+            playerMesh.SetActive(false);
             rb.AddRelativeForce(direction * power * impulsPowerModifier, ForceMode.Impulse);
         }
 
@@ -54,8 +68,19 @@ namespace DNA
 
         private void OnCollisionEnter(Collision collision)
         {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            groundRay.origin = projectileTransform.position;
+
+            if (Physics.Raycast(groundRay, out hit, .3f, groundLayermask))
+            {
+                owntransform.position = new Vector3(owntransform.position.x, hit.point.y + .75f, owntransform.position.z);
+                roomStateTracker.ApplyPlayerImpact(hit.point, 3f);
+
+                playerMesh.SetActive(true);
+                projectile.SetActive(false);
+
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
         }
     }
 }
