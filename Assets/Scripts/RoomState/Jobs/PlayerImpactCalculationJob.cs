@@ -22,7 +22,7 @@ namespace DNA
         [NativeDisableParallelForRestriction]
         public NativeArray<Color> pixels;
 
-        #region States
+        #region Main Execution
 
         public void Execute(int index)
         {

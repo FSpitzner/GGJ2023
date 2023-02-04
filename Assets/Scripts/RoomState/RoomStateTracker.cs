@@ -146,7 +146,40 @@ namespace DNA
 
         public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
         {
+            // Convert physical bounds of flamethrower to grid:
+            FlameGridBounds flameGridBounds = new FlameGridBounds
+            {
+                a = PositionToGrid(flameBounds.a),
+                b = PositionToGrid(flameBounds.b),
+                c = PositionToGrid(flameBounds.c),
+                d = PositionToGrid(flameBounds.d)
+            };
 
+            // Iterate all index values around the rectangle and check if points are inside the rectangle:
+            NativeArray<int2> indexList = new NativeArray<int2>(flameGridBounds.Width * flameGridBounds.Height, Allocator.TempJob);
+            NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
+            for (int y = flameGridBounds.MinY; y <= flameGridBounds.MaxY; y++)
+            {
+                for (int x = flameGridBounds.MinX; x <= flameGridBounds.MaxX; x++)
+                {
+                    indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(x, y);
+                }
+            }
+
+            // Initialize job:
+            FlamethrowerImpactCalculationJob job = new FlamethrowerImpactCalculationJob
+            {
+                states = states,
+                indexList = indexList,
+                bounds = flameGridBounds,
+                dimensions = dimensions,
+                pixels = pixels
+            };
+            JobHandle handle = job.Schedule(indexList.Length, 10);
+            handle.Complete();
+            indexList.Dispose();
+            textureGenerator.Pixels = pixels.ToArray();
+            pixels.Dispose();
         }
         #endregion
 
