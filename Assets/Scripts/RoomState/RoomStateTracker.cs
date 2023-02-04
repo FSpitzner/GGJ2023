@@ -144,19 +144,6 @@ namespace DNA
             textureGenerator.WriteToFile();
         }
 
-        /*private void OvergrowSpot(int x, int y)
-        {
-            // Only apply overgrowth on clean floor areas:
-            if (states[GetIndex(x, y, dimensions.x)] != RoomState.CLEAN_FLOOR)
-                return;
-
-            // Update room state at impact point to overgrown state:
-            states[GetIndex(x, y, dimensions.x)] = RoomState.OVERGROWN_FLOOR;
-
-            // Update texture at impact point:
-            textureGenerator.UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
-        }*/
-
         public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
         {
 
@@ -221,6 +208,15 @@ namespace DNA
                 return;
 
             textureGenerator.GenerateTexture(states, dimensions);
+        }
+
+        #endregion
+
+        #region Getters
+
+        public RoomState GetState(int x, int y)
+        {
+            return states[GetIndex(x, y, dimensions.x)];
         }
 
         #endregion
