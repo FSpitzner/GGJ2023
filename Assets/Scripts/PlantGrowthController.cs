@@ -28,7 +28,7 @@ namespace DNA
         void Start()
         {
             int2 dimentions = new int2(50, 50);
-            random = new Random();
+            random = new Random(5611556);
 
             for (int i = 0; i < numberOfGrowths; i++)
             {
@@ -49,6 +49,23 @@ namespace DNA
                     arrayPosition = point,
                     spawnedObject = null
                 });
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+            if (growths.Count > 0)
+            {
+                for (int i = 0; i < growths.Count; i++)
+                {
+                    Vector3 pointPos2D = roomStateTracker.GridToPosition(growths[i].arrayPosition.x, growths[i].arrayPosition.y);
+                    pointPos2D.y = 20f;
+                    if (Physics.Raycast(ray, out hit, 30f, groundMask))
+                    {
+                        Gizmos.DrawWireSphere(hit.point, .5f);
+                    }
+                }
             }
         }
 
