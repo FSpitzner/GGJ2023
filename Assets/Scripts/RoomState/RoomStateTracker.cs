@@ -8,7 +8,7 @@ namespace DNA
     public class RoomStateTracker : MonoBehaviour
     {
         #region Inspector Variables
-        [Header("Settings")]
+        [Header("Scan")]
         [SerializeField]
         private Vector2 roomStartBoundary = Vector2.zero;
         [SerializeField]
@@ -18,11 +18,18 @@ namespace DNA
         [Min(0)]
         private int scanDensity = 1;
 
+        [Header("Gameplay")]
+        [SerializeField]
+        [Min(1)]
+        private int playerImpactRadius = 1;
+
         [Header("References")]
         [SerializeField]
-        private RoomScanner scanner;
+        private RoomScanner scanner = null;
         [SerializeField]
-        private RoomTextureGenerator textureGenerator;
+        private RoomTextureGenerator textureGenerator = null;
+        [SerializeField]
+        private PercentageBar percentageBar = null;
         #endregion
 
         #region Internal Variables
@@ -30,6 +37,7 @@ namespace DNA
         private int availableFloorSpots = 0;
         private int overgrownSpots = 0;
         private float overgrownPercentage = 0f;
+        private List<Vector2Int> circleOffsets;
         #endregion
 
         #region Properties
@@ -50,6 +58,32 @@ namespace DNA
 
             // Generate initial floor texture:
             GenerateTexture();
+
+            // Pre-calculate offset index values to be accessed to create circular pattern in the array:
+            CalculateCircleOffsets();
+        }
+
+        private void CalculateCircleOffsets()
+        {
+            // Pre-calculate offset index values to be accessed to create circular pattern in the array:
+            circleOffsets = new List<Vector2Int>();
+            int threshold = playerImpactRadius * playerImpactRadius;
+            Vector2Int vec = new Vector2Int();
+            for (int i = 0; i < playerImpactRadius; i++)
+            {
+                vec.x = i;
+                for (int j = 0; j < playerImpactRadius; j++)
+                {
+                    if (i * i + j * j < threshold)
+                    {
+                        vec.y = j;
+                        circleOffsets.Add(vec); vec.x = -vec.x; // i,j
+                        circleOffsets.Add(vec); vec.y = -vec.y; // -i,j
+                        circleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
+                        circleOffsets.Add(vec);                 // i,-j
+                    }
+                }
+            }
         }
 
         #endregion
@@ -72,11 +106,33 @@ namespace DNA
             // Remap impact position to array index:
             Vector2Int impactIndex = PositionToGrid(impactPosition);
 
+            // Mark impact spot as overgrown:
+            OvergrowSpot(impactIndex.x, impactIndex.y);
+
+            // Iterate all spots that are inside the given circle radius around the impact:
+            foreach (Vector2Int offset in circleOffsets)
+            {
+                // Calculate index by using pre-calculated offset:
+                Vector2Int targetIndex = new Vector2Int(impactIndex.x + offset.x, impactIndex.y + offset.y);
+
+                // Skip to next loop if point is outside array boundaries:
+                if (targetIndex.x < 0 || targetIndex.x >= states.GetLength(0) || targetIndex.y < 0 || targetIndex.y >= states.GetLength(1))
+                    continue;
+
+                // Apply overgrowth:
+                OvergrowSpot(targetIndex.x, targetIndex.y);
+            }
+
+            textureGenerator.WriteToFile();
+        }
+
+        private void OvergrowSpot(int x, int y)
+        {
             // Update room state at impact point to overgrown state:
-            states[impactIndex.x, impactIndex.y] = RoomState.OVERGROWN_FLOOR;
+            states[x, y] = RoomState.OVERGROWN_FLOOR;
 
             // Update texture at impact point:
-            textureGenerator.UpdateTexture(impactIndex.x, impactIndex.y, RoomState.OVERGROWN_FLOOR);
+            textureGenerator.UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
         }
 
         #endregion
@@ -123,6 +179,10 @@ namespace DNA
         {
             // Calculate percentage:
             overgrownPercentage = (float)overgrownSpots / (float)availableFloorSpots;
+
+            // Display in UI:
+            if (percentageBar != null)
+                percentageBar.Percentage = overgrownPercentage;
         }
 
         #endregion
@@ -146,8 +206,8 @@ namespace DNA
             // Remap physical position inside room boundaries to state array:
             return new Vector2Int
             {
-                x = Mathf.RoundToInt(position.x.RemapExclusive(roomStartBoundary.x, roomEndBoundary.x, 0, states.GetLength(0) - 1)),
-                y = Mathf.RoundToInt(position.y.RemapExclusive(roomStartBoundary.y, roomEndBoundary.y, 0, states.GetLength(1) - 1))
+                x = Mathf.RoundToInt(position.x.RemapExclusive(roomStartBoundary.x, roomEndBoundary.x, states.GetLength(0) - 1, 0)),
+                y = Mathf.RoundToInt(position.z.RemapExclusive(roomStartBoundary.y, roomEndBoundary.y, states.GetLength(1) - 1, 0))
             };
         }
 

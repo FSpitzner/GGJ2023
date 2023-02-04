@@ -185,6 +185,7 @@ MonoBehaviour:
   roomStartBoundary: {x: -19, y: -19}
   roomEndBoundary: {x: 19, y: 19}
   scanDensity: 20
+  playerImpactRadius: 50
   scanner: {fileID: 57534382}
   textureGenerator: {fileID: 57534381}
 --- !u!4 &57534384
