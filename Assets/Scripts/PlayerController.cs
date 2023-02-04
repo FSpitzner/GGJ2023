@@ -19,7 +19,7 @@ namespace DNA
         [SerializeField] VisualEffect launchEffect = null;
         [SerializeField] VisualEffect landEffect = null;
 
-        [SerializeField] GameObject playerMesh = null;
+        [SerializeField] SkinnedMeshRenderer playerMesh = null;
         [SerializeField] GameObject projectile = null;
         [SerializeField] GameObject contactPointPrefab;
         [SerializeField] float heightOffsetProjectile = .75f;
@@ -28,6 +28,8 @@ namespace DNA
         [SerializeField] private Arrow arrow;
 
         [SerializeField] float spreadRadius = 3f;
+        [SerializeField] private float tiltShapeKeySpeed = 1f;
+        [SerializeField] private float throwShapeKeySpeed = 1f;
 
         [SerializeField] private int health = 3;
 
@@ -40,6 +42,11 @@ namespace DNA
 
         private List<PlayerContactPoint> pointTrackList = new List<PlayerContactPoint>();
 
+        private float tiltShapeKeyPos = 0;
+        private float throwShapeKeyPos = 0;
+
+        private bool flying = false;
+
         private void Start()
         {
             UpdateIndicator(0f);
@@ -51,41 +58,90 @@ namespace DNA
         void Update()
         {
             direction = new Vector3(input.Direction.x, 0, input.Direction.y);
-            if (direction.magnitude <= 0.1f)
-                return;
-
-            arrow.SetDirection(direction);
-            arrow.SetScale(1);
-            playerMesh.transform.forward = direction;
-
-            direction.y = 0.75f;
-
-            if (input.JumpActive)
+            if (direction.magnitude > 0.1f)
             {
-                powerTimer += Time.deltaTime;
-                if (powerTimer > maxPowerAfterSeconds)
-                    powerTimer = maxPowerAfterSeconds;
-                float powerNormalized = powerTimer.RemapExclusive(0, maxPowerAfterSeconds, 0, 1f);
-                UpdateIndicator(powerNormalized);
+                arrow.SetDirection(direction);
+                arrow.SetScale(1);
+                playerMesh.transform.forward = -direction;
+
+                direction.y = 0.75f;
+
+                if (input.JumpActive)
+                {
+                    powerTimer += Time.deltaTime;
+                    if (powerTimer > maxPowerAfterSeconds)
+                        powerTimer = maxPowerAfterSeconds;
+                    float powerNormalized = powerTimer.RemapExclusive(0, maxPowerAfterSeconds, 0, 1f);
+
+                    throwShapeKeyPos = Mathf.Lerp(0, -40, powerTimer / maxPowerAfterSeconds);
+                    playerMesh.SetBlendShapeWeight(1, throwShapeKeyPos);
+
+                    UpdateIndicator(powerNormalized);
+                }
+                else if (!input.JumpActive && powerTimer > 0f)
+                {
+                    float powerNormalized = powerTimer.RemapExclusive(0, maxPowerAfterSeconds, 0, 1f);
+                    Jump(direction, powerNormalized);
+                    powerTimer = 0f;
+
+                    throwShapeKeyPos = 0;
+                    playerMesh.SetBlendShapeWeight(1, throwShapeKeyPos);
+
+                    UpdateIndicator(0f);
+                }
+
+                if (tiltShapeKeyPos < 100)
+                {
+                    tiltShapeKeyPos += tiltShapeKeySpeed * Time.deltaTime;
+                    if (tiltShapeKeyPos > 100)
+                        tiltShapeKeyPos = 100;
+                }
             }
-            else if (!input.JumpActive && powerTimer > 0f)
+            else
             {
-                float powerNormalized = powerTimer.RemapExclusive(0, maxPowerAfterSeconds, 0, 1f);
-                Jump(direction, powerNormalized);
-                powerTimer = 0f;
-                UpdateIndicator(0f);
+                if(tiltShapeKeyPos > 0)
+                {
+                    tiltShapeKeyPos -= tiltShapeKeySpeed * Time.deltaTime;
+                    if (tiltShapeKeyPos < 0)
+                        tiltShapeKeyPos = 0;
+                }
+            }
+
+            playerMesh.SetBlendShapeWeight(0, tiltShapeKeyPos);
+
+            if (flying)
+            {
+                projectileTransform.up = rb.velocity;
             }
         }
 
         void Jump(Vector3 direction, float power)
         {
+            StartCoroutine(JumpNumerator(direction, power));
+        }
+
+        private IEnumerator JumpNumerator(Vector3 direction, float power)
+        {
+            while(throwShapeKeyPos < 100)
+            {
+                throwShapeKeyPos += throwShapeKeySpeed * Time.deltaTime;
+                playerMesh.SetBlendShapeWeight(1, throwShapeKeyPos);
+
+                yield return new WaitForEndOfFrame();
+            }
+
             direction = new Vector3(input.Direction.x, 0.75f, input.Direction.y);
 
+            throwShapeKeyPos = 0;
+            playerMesh.SetBlendShapeWeight(1, throwShapeKeyPos);
+
             projectile.SetActive(true);
-            playerMesh.SetActive(false);
+            playerMesh.gameObject.SetActive(false);
             arrow.SetActive(false);
             rb.AddRelativeForce(direction * power * impulsPowerModifier, ForceMode.Impulse);
             //launchEffect.Play();
+
+            flying = true;
         }
 
         void UpdateIndicator(float power)
@@ -124,7 +180,7 @@ namespace DNA
                 owntransform.position = new Vector3(owntransform.position.x, hit.point.y + heightOffsetProjectile, owntransform.position.z);
                 roomStateTracker.ApplyPlayerImpact(hit.point);
 
-                playerMesh.SetActive(true);
+                playerMesh.gameObject.SetActive(true);
                 projectile.SetActive(false);
                 arrow.SetActive(true);
 
@@ -143,6 +199,8 @@ namespace DNA
                     Destroy(pointTrackList[0].gameObject);
                     pointTrackList.RemoveAt(0);
                 }
+
+                flying = false;
             }
         }
     }
