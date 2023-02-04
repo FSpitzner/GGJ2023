@@ -35,7 +35,7 @@ namespace DNA
         [SerializeField]
         private RoomTextureGenerator textureGenerator = null;
         [SerializeField]
-        private PercentageBar percentageBar = null;
+        private LevelProgress levelProgress = null;
         #endregion
 
         #region Internal Variables
@@ -297,8 +297,8 @@ namespace DNA
             overgrownPercentage = (float)overgrownSpots / (float)availableFloorSpots;
 
             // Display in UI:
-            if (percentageBar != null)
-                percentageBar.Percentage = overgrownPercentage;
+            if (levelProgress != null)
+                levelProgress.Progress = overgrownPercentage;
         }
 
         #endregion

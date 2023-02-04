@@ -67,7 +67,14 @@ namespace DNA
         private RoomState Scan(int x, int y)
         {
             // Calculate physical position of the scan inside the room:
-            Vector3 scanOrigin = new Vector3(scanStartPoint.x + ((float)x * (1f / (float)scanDensity)), 100f, scanStartPoint.y + ((float)y * (1f / (float)scanDensity)));
+            /*Vector3 scanOrigin = new Vector3(
+                scanStartPoint.x + ((float)x * (1f / (float)scanDensity)),
+                100f,
+                scanStartPoint.y + ((float)y * (1f / (float)scanDensity)));*/
+            Vector3 scanOrigin = new Vector3(
+                scanEndPoint.x - ((float)x * (1f / (float)scanDensity)),
+                100f,
+                scanEndPoint.y - ((float)y * (1f / (float)scanDensity)));
 
             // Raycast at position to be scanned:
             Ray ray = new Ray(scanOrigin, Vector3.down);
