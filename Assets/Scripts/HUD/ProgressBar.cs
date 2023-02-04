@@ -38,15 +38,19 @@ namespace DNA
         #endregion
 
         #region Internal Variables
+        private bool acceptValues = false;
         #endregion
 
         #region Properties
         public float Percentage {
             set
             {
-                float displayPercentage = Mathf.Clamp(value, 0f, 1f);
-                percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * displayPercentage).ToString(), percentageSuffix);
-                BarFill = displayPercentage;
+                if (acceptValues)
+                {
+                    float displayPercentage = Mathf.Clamp(value, 0f, 1f);
+                    percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * displayPercentage).ToString(), percentageSuffix);
+                    BarFill = displayPercentage;
+                }
             }
         }
 
@@ -54,7 +58,7 @@ namespace DNA
         {
             set
             {
-                barFill.fillAmount = value;
+                 barFill.fillAmount = value;
                 /*if (barFillTween != null)
                     barFillTween.Kill();
                 barFillTween = barFill.DOFillAmount(value, barFillAnimationTime).SetEase(Ease.InOutExpo);*/
@@ -89,13 +93,22 @@ namespace DNA
             Sequence scaleSequence = DOTween.Sequence();
             scaleSequence.Append(barTransform.DOScale(targetIndicatorIncreasedScale, 0.5f).SetEase(Ease.OutExpo));
 
+            // Empty bar with animation:
+            barFill.fillAmount = 1f;
+            Percentage = 1f;
+            percentageText.text = string.Format("{0}{1}", 100f, percentageSuffix);
+            barFill.DOFillAmount(0f, 0.6f).SetEase(Ease.InOutExpo).SetDelay(0.5f)
+                .OnUpdate(() => percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * barFill.fillAmount).ToString(), percentageSuffix))
+                .OnComplete(() => percentageText.transform.DOShakePosition(0.25f, 5f));
+
             // Scale back down to base size:
-            scaleSequence.Append(barTransform.DOScale(targetIndicatorDefaultScale, 1f).SetEase(Ease.OutExpo).SetDelay(2f));
+            scaleSequence.Append(barTransform.DOScale(targetIndicatorDefaultScale, 1f).SetEase(Ease.OutExpo).SetDelay(1.25f));
 
             // Move back and forth in sync with scaling:
             Sequence moveSequence = DOTween.Sequence();
             moveSequence.Append(barTransform.DOAnchorPosY(-400f, 0.5f).SetEase(Ease.OutExpo));
-            moveSequence.Append(barTransform.DOAnchorPosY(-50f, 1f).SetEase(Ease.OutExpo).SetDelay(2f));
+            moveSequence.Append(barTransform.DOAnchorPosY(-50f, 1f).SetEase(Ease.OutExpo).SetDelay(1.25f));
+            moveSequence.OnComplete(() => acceptValues = true);
         }
 
         #endregion
