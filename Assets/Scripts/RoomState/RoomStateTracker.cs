@@ -123,7 +123,7 @@ namespace DNA
 
             // Mark impact spot as overgrown:
             /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
-
+            Debug.Log("Test 1");
             // Iterate all spots that are inside the given circle radius around the impact:
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
             PlayerImpactCalculationJob job = new PlayerImpactCalculationJob
@@ -140,6 +140,7 @@ namespace DNA
             /*textureGenerator.PixelData = pixels;*/
             pixels.Dispose();
 
+            Debug.Log("Test 2");
             textureGenerator.UpdateFloorMaterial();
             textureGenerator.WriteToFile();
         }
