@@ -25,6 +25,9 @@ namespace DNA
         [SerializeField]
         [Min(1)]
         private int playerImpactRadius = 1;
+        [SerializeField]
+        [Min(1)]
+        private int flameRadius = 1;
 
         [Header("References")]
         [SerializeField]
@@ -41,7 +44,8 @@ namespace DNA
         private int availableFloorSpots = 0;
         private int overgrownSpots = 0;
         private float overgrownPercentage = 0f;
-        private NativeList<int2> circleOffsets;
+        private NativeList<int2> playerCircleOffsets;
+        private NativeList<int2> flameCircleOffsets;
         #endregion
 
         #region Properties
@@ -65,13 +69,14 @@ namespace DNA
             GenerateTexture();
 
             // Pre-calculate offset index values to be accessed to create circular pattern in the array:
-            CalculateCircleOffsets();
+            CalculatePlayerCircleOffsets();
+            CalculateFlameCircleOffsets();
         }
 
-        private void CalculateCircleOffsets()
+        private void CalculatePlayerCircleOffsets()
         {
             // Pre-calculate offset index values to be accessed to create circular pattern in the array:
-            circleOffsets = new NativeList<int2>(Allocator.Persistent);
+            playerCircleOffsets = new NativeList<int2>(Allocator.Persistent);
             int threshold = playerImpactRadius * playerImpactRadius;
             int2 vec = new int2();
             for (int i = 0; i < playerImpactRadius; i++)
@@ -82,10 +87,33 @@ namespace DNA
                     if (i * i + j * j < threshold)
                     {
                         vec.y = j;
-                        circleOffsets.Add(vec); vec.x = -vec.x; // i,j
-                        circleOffsets.Add(vec); vec.y = -vec.y; // -i,j
-                        circleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
-                        circleOffsets.Add(vec);                 // i,-j
+                        playerCircleOffsets.Add(vec); vec.x = -vec.x; // i,j
+                        playerCircleOffsets.Add(vec); vec.y = -vec.y; // -i,j
+                        playerCircleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
+                        playerCircleOffsets.Add(vec);                 // i,-j
+                    }
+                }
+            }
+        }
+
+        private void CalculateFlameCircleOffsets()
+        {
+            // Pre-calculate offset index values to be accessed to create circular pattern in the array:
+            flameCircleOffsets = new NativeList<int2>(Allocator.Persistent);
+            int threshold = flameRadius * flameRadius;
+            int2 vec = new int2();
+            for (int i = 0; i < flameRadius; i++)
+            {
+                vec.x = i;
+                for (int j = 0; j < flameRadius; j++)
+                {
+                    if (i * i + j * j < threshold)
+                    {
+                        vec.y = j;
+                        flameCircleOffsets.Add(vec); vec.x = -vec.x; // i,j
+                        flameCircleOffsets.Add(vec); vec.y = -vec.y; // -i,j
+                        flameCircleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
+                        flameCircleOffsets.Add(vec);                 // i,-j
                     }
                 }
             }
@@ -98,7 +126,8 @@ namespace DNA
         private void OnDestroy()
         {
             states.Dispose();
-            circleOffsets.Dispose();
+            playerCircleOffsets.Dispose();
+            flameCircleOffsets.Dispose();
         }
 
         #endregion
@@ -123,28 +152,57 @@ namespace DNA
 
             // Mark impact spot as overgrown:
             /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
-
+            Debug.Log("Test 1");
             // Iterate all spots that are inside the given circle radius around the impact:
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
-            PlayerImpactCalculationJob job = new PlayerImpactCalculationJob
+            CircleCalculationJob job = new CircleCalculationJob
             {
                 states = states,
                 centerIndex = impactIndex,
-                offsets = circleOffsets,
+                offsets = playerCircleOffsets,
                 dimensions = dimensions,
-                pixels = pixels
+                pixels = pixels,
+                originState = RoomState.CLEAN_FLOOR,
+                targetState = RoomState.OVERGROWN_FLOOR
             };
-            JobHandle handle = job.Schedule(circleOffsets.Length, 10);
+            JobHandle handle = job.Schedule(playerCircleOffsets.Length, 10);
             handle.Complete();
             textureGenerator.Pixels = pixels.ToArray();
             /*textureGenerator.PixelData = pixels;*/
             pixels.Dispose();
 
+            Debug.Log("Test 2");
             textureGenerator.UpdateFloorMaterial();
             textureGenerator.WriteToFile();
         }
 
-        public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
+        public void ApplyFlamethrowerCircle(Vector3 impactPosition)
+        {
+            // Remap impact position to array index:
+            int2 impactIndex = PositionToGrid(impactPosition);
+
+            // Iterate all spots that are inside the given circle radius around the impact:
+            NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
+            CircleCalculationJob job = new CircleCalculationJob
+            {
+                states = states,
+                centerIndex = impactIndex,
+                offsets = flameCircleOffsets,
+                dimensions = dimensions,
+                pixels = pixels,
+                originState = RoomState.OVERGROWN_FLOOR,
+                targetState = RoomState.CLEAN_FLOOR
+            };
+            JobHandle handle = job.Schedule(flameCircleOffsets.Length, 10);
+            handle.Complete();
+            textureGenerator.Pixels = pixels.ToArray();
+            pixels.Dispose();
+
+            textureGenerator.UpdateFloorMaterial();
+            /*textureGenerator.WriteToFile();*/
+        }
+
+        /*public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
         {
             // Convert physical bounds of flamethrower to grid:
             FlameGridBounds flameGridBounds = new FlameGridBounds
@@ -159,20 +217,20 @@ namespace DNA
             NativeArray<int2> indexList = new NativeArray<int2>(flameGridBounds.Width * flameGridBounds.Height, Allocator.TempJob);
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
 
-            /*Debug.Log("Index list length: " + indexList.Length);
+            Debug.Log("Index list length: " + indexList.Length);
             Debug.Log("Pixels length: " + pixels.Length);
             Debug.Log("Flame grid MinX: " + flameGridBounds.MinX);
             Debug.Log("Flame grid MaxX: " + flameGridBounds.MaxX);
             Debug.Log("Flame grid width: " + flameGridBounds.Width);
             Debug.Log("Flame grid MinY: " + flameGridBounds.MinY);
             Debug.Log("Flame grid MaxY: " + flameGridBounds.MaxY);
-            Debug.Log("Flame grid height: " + flameGridBounds.Height);*/
+            Debug.Log("Flame grid height: " + flameGridBounds.Height);
 
             for (int y = 0; y < flameGridBounds.Height; y++)
             {
                 for (int x = 0; x < flameGridBounds.Width; x++)
                 {
-                    indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(x, y);
+                    indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(flameGridBounds.MinX + x, flameGridBounds.MinY + y);
                 }
             }
 
@@ -192,7 +250,7 @@ namespace DNA
             pixels.Dispose();
 
             textureGenerator.UpdateFloorMaterial();
-        }
+        }*/
 
         #endregion
 

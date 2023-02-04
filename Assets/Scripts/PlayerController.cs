@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 namespace DNA
 {
@@ -15,6 +16,8 @@ namespace DNA
         [SerializeField] Image powerIndicator = null;
         [SerializeField] RoomStateTracker roomStateTracker = null;
         [SerializeField] PlantGrowthController plantGrowthController = null;
+        [SerializeField] VisualEffect launchEffect = null;
+        [SerializeField] VisualEffect landEffect = null;
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject projectile = null;
@@ -82,6 +85,7 @@ namespace DNA
             playerMesh.SetActive(false);
             arrow.SetActive(false);
             rb.AddRelativeForce(direction * power * impulsPowerModifier, ForceMode.Impulse);
+            //launchEffect.Play();
         }
 
         void UpdateIndicator(float power)
@@ -123,6 +127,8 @@ namespace DNA
                 playerMesh.SetActive(true);
                 projectile.SetActive(false);
                 arrow.SetActive(true);
+
+                landEffect.Play();
 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;

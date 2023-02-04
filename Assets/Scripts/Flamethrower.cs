@@ -19,7 +19,7 @@ namespace DNA
             ray.direction = Vector3.down;
         }
 
-        private void Update()
+        /*private void Update()
         {
             ray.origin = point1.position;
             if (Physics.Raycast(ray, out hit, 1f, cleaningMask))
@@ -46,6 +46,11 @@ namespace DNA
             }
 
             roomStateTracker.ApplyFlamethrowerImpact(flamybounds);
+        }*/
+
+        public void UseFlamethrower()
+        {
+            roomStateTracker.ApplyFlamethrowerCircle(transform.position);
         }
     }
 }
