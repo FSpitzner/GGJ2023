@@ -114,4 +114,21 @@ public class RobotController : MonoBehaviour
             robotState = RobotState.Patrol;
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.ApplyDamage();
+        }
+        else if (other.attachedRigidbody)
+        {
+            damageable = other.attachedRigidbody.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.ApplyDamage();
+            }
+        }
+        
+    }
 }
