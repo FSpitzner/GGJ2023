@@ -114,7 +114,7 @@ namespace DNA
 
         #endregion
 
-        #region Player Impact
+        #region Impacts
 
         public void ApplyPlayerImpact(Vector3 impactPosition)
         {
@@ -157,6 +157,10 @@ namespace DNA
             textureGenerator.UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
         }*/
 
+        public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
+        {
+
+        }
         #endregion
 
         #region Counting
