@@ -92,7 +92,7 @@ namespace DNA
             if (floorMaterial == null)
                 return;
 
-            floorMaterial.SetTexture("_OvergrowthMask", texture);
+            //floorMaterial.SetTexture("_OvergrowthMask", texture);
         }
 
         #endregion
