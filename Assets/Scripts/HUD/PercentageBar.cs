@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,10 @@ namespace DNA
         private Image barFill = null;
         #endregion
 
+        #region Internal Variables
+        private Tween barFillTween = null;
+        #endregion
+
         #region Properties
         public float Percentage {
             set
@@ -27,6 +32,14 @@ namespace DNA
                 float displayPercentage = Mathf.Clamp(value, 0f, 1f);
                 percentageText.text = string.Format("{0}{1}", Mathf.Round(100f * displayPercentage).ToString(), percentageSuffix);
                 barFill.fillAmount = displayPercentage;
+            }
+        }
+
+        private float BarFill
+        {
+            set
+            {
+
             }
         }
         #endregion

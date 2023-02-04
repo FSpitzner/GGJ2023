@@ -76,7 +76,7 @@ namespace DNA
             if (Physics.Raycast(groundRay, out hit, .3f, groundLayermask))
             {
                 owntransform.position = new Vector3(owntransform.position.x, hit.point.y + heightOffsetProjectile, owntransform.position.z);
-                roomStateTracker.ApplyPlayerImpact(hit.point, 3f);
+                roomStateTracker.ApplyPlayerImpact(hit.point);
 
                 playerMesh.SetActive(true);
                 projectile.SetActive(false);

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace DNA
@@ -28,7 +30,7 @@ namespace DNA
 
         #region Scan
 
-        public RoomState[,] ScanRoom()
+        public NativeArray<RoomState> ScanRoom(out int2 dimensions)
         {
             // Get layer index by name:
             floorLayer = LayerMask.NameToLayer("Floor");
@@ -43,10 +45,11 @@ namespace DNA
             Vector2 roomSize = new Vector2(Mathf.Max(scanEndPoint.x - scanStartPoint.x, 0f), Mathf.Max(scanEndPoint.y - scanStartPoint.y, 0f));
 
             // Calculate number of scans per row/column:
-            Vector2Int numberOfScans = new Vector2Int(Mathf.CeilToInt(roomSize.x) * scanDensity, Mathf.CeilToInt(roomSize.y) * scanDensity);
+            int2 numberOfScans = new int2(Mathf.CeilToInt(roomSize.x) * scanDensity, Mathf.CeilToInt(roomSize.y) * scanDensity);
+            dimensions = numberOfScans;
 
             // Create state array:
-            RoomState[,] states = new RoomState[numberOfScans.x, numberOfScans.y];
+            NativeArray<RoomState> states = new NativeArray<RoomState>(numberOfScans.x * numberOfScans.y, Allocator.Persistent);
 
             // Iterate over the room and scan every spot for floor or walls spot:
             for (int y = 0; y < numberOfScans.y; y++)
@@ -54,7 +57,7 @@ namespace DNA
                 for (int x = 0; x < numberOfScans.x; x++)
                 {
                     // Set state of scanned spot depending on the surface that was hit:
-                    states[x, y] = Scan(x, y);
+                    states[RoomStateTracker.GetIndex(x, y, dimensions.x)] = Scan(x, y);
                 }
             }
 

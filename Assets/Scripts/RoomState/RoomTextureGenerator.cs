@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,14 +9,35 @@ namespace DNA
 {
     public class RoomTextureGenerator : MonoBehaviour
     {
+        #region Inspector Variables
+        [SerializeField]
+        private Material floorMaterial = null;
+        #endregion
+
         #region Internal Variables
         private Texture2D texture;
         #endregion
 
-        public void GenerateTexture(RoomState[,] roomState)
+        #region Properties
+        public Color[] Pixels
+        {
+            get
+            {
+                return texture.GetPixels();
+            }
+            set
+            {
+                texture.SetPixels(value);
+            }
+        }
+        #endregion
+
+        public void GenerateTexture(NativeArray<RoomState> states, int2 dimensions)
         {
             // Create empty texture with dimensions matching the state array:
-            texture = new Texture2D(roomState.GetLength(0), roomState.GetLength(1), TextureFormat.RGB24, false);
+            texture = new Texture2D(dimensions.x, dimensions.y, TextureFormat.RGB24, false);
+            Debug.Log("Dimensions: " + dimensions);
+            Debug.Log("States length: " + states.Length);
 
             // Iterate over every pixel in texture:
             for (int y = 0; y < texture.height; y++)
@@ -23,21 +45,14 @@ namespace DNA
                 for (int x = 0; x < texture.width; x++)
                 {
                     // Set pixel color depending on room state:
-                    texture.SetPixel(x, y, CalculateStateColor(roomState[x, y]));
+                    texture.SetPixel(x, y, CalculateStateColor(states[RoomStateTracker.GetIndex(x, y, dimensions.x)]));
                 }
             }
 
+            Debug.Log("Texture size: " + texture.width + " x " + texture.height);
+
             // Write texture to file for debug purposes:
             WriteToFile();
-        }
-
-        public void UpdateTexture(int x, int y, RoomState state)
-        {
-            // Update pixel at given position:
-            texture.SetPixel(x, y, CalculateStateColor(state));
-
-            // Write texture to file for debug purposes:
-            /*WriteToFile();*/
         }
 
         private Color CalculateStateColor(RoomState state)
@@ -69,5 +84,17 @@ namespace DNA
             string filePath = string.Format("{0}/{1}/{2}{3}", Application.dataPath, "TextureOutput", "test", ".png");
             File.WriteAllBytes(filePath, textureBytes);
         }
+
+        #region Material
+
+        public void UpdateFloorMaterial()
+        {
+            if (floorMaterial == null)
+                return;
+
+            floorMaterial.SetTexture("_OvergrowthMask", texture);
+        }
+
+        #endregion
     }
 }

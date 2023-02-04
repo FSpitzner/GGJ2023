@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace DNA
@@ -33,17 +36,19 @@ namespace DNA
         #endregion
 
         #region Internal Variables
-        private RoomState[,] states;
+        private NativeArray<RoomState> states;
+        private int2 dimensions;
         private int availableFloorSpots = 0;
         private int overgrownSpots = 0;
         private float overgrownPercentage = 0f;
-        private List<Vector2Int> circleOffsets;
+        private NativeList<int2> circleOffsets;
         #endregion
 
         #region Properties
         public Vector2 RoomStartBoundary { get { return roomStartBoundary; }}
         public Vector2 RoomEndBoundary { get { return roomEndBoundary; }}
         public int StateDensity { get { return scanDensity; } }
+        public int2 StatesDimensions { get { return dimensions; } }
         #endregion
 
         #region Setup
@@ -51,7 +56,7 @@ namespace DNA
         private void Start()
         {
             // Initialize states array by scanning the room for floor and wall areas:
-            states = scanner.ScanRoom();
+            states = scanner.ScanRoom(out dimensions);
 
             // Count all spots that are occupied by floor area:
             CountAvailableFloorSpots();
@@ -66,9 +71,9 @@ namespace DNA
         private void CalculateCircleOffsets()
         {
             // Pre-calculate offset index values to be accessed to create circular pattern in the array:
-            circleOffsets = new List<Vector2Int>();
+            circleOffsets = new NativeList<int2>(Allocator.Persistent);
             int threshold = playerImpactRadius * playerImpactRadius;
-            Vector2Int vec = new Vector2Int();
+            int2 vec = new int2();
             for (int i = 0; i < playerImpactRadius; i++)
             {
                 vec.x = i;
@@ -88,6 +93,16 @@ namespace DNA
 
         #endregion
 
+        #region Destroy
+
+        private void OnDestroy()
+        {
+            states.Dispose();
+            circleOffsets.Dispose();
+        }
+
+        #endregion
+
         #region Update
 
         private void Update()
@@ -101,39 +116,46 @@ namespace DNA
 
         #region Player Impact
 
-        public void ApplyPlayerImpact(Vector3 impactPosition, float impactRadius)
+        public void ApplyPlayerImpact(Vector3 impactPosition)
         {
             // Remap impact position to array index:
-            Vector2Int impactIndex = PositionToGrid(impactPosition);
+            int2 impactIndex = PositionToGrid(impactPosition);
 
             // Mark impact spot as overgrown:
-            OvergrowSpot(impactIndex.x, impactIndex.y);
+            /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
 
             // Iterate all spots that are inside the given circle radius around the impact:
-            foreach (Vector2Int offset in circleOffsets)
+            NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
+            PlayerImpactCalculationJob job = new PlayerImpactCalculationJob
             {
-                // Calculate index by using pre-calculated offset:
-                Vector2Int targetIndex = new Vector2Int(impactIndex.x + offset.x, impactIndex.y + offset.y);
+                states = states,
+                centerIndex = impactIndex,
+                offsets = circleOffsets,
+                dimensions = dimensions,
+                pixels = pixels
+            };
+            JobHandle handle = job.Schedule(circleOffsets.Length, 10);
+            handle.Complete();
+            textureGenerator.Pixels = pixels.ToArray();
+            /*textureGenerator.PixelData = pixels;*/
+            pixels.Dispose();
 
-                // Skip to next loop if point is outside array boundaries:
-                if (targetIndex.x < 0 || targetIndex.x >= states.GetLength(0) || targetIndex.y < 0 || targetIndex.y >= states.GetLength(1))
-                    continue;
-
-                // Apply overgrowth:
-                OvergrowSpot(targetIndex.x, targetIndex.y);
-            }
-
+            textureGenerator.UpdateFloorMaterial();
             textureGenerator.WriteToFile();
         }
 
-        private void OvergrowSpot(int x, int y)
+        /*private void OvergrowSpot(int x, int y)
         {
+            // Only apply overgrowth on clean floor areas:
+            if (states[GetIndex(x, y, dimensions.x)] != RoomState.CLEAN_FLOOR)
+                return;
+
             // Update room state at impact point to overgrown state:
-            states[x, y] = RoomState.OVERGROWN_FLOOR;
+            states[GetIndex(x, y, dimensions.x)] = RoomState.OVERGROWN_FLOOR;
 
             // Update texture at impact point:
             textureGenerator.UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
-        }
+        }*/
 
         #endregion
 
@@ -144,12 +166,12 @@ namespace DNA
             availableFloorSpots = 0;
 
             // Iterate all spots:
-            for (int y = 0; y < states.GetLength(1); y++)
+            for (int y = 0; y < dimensions.y; y++)
             {
-                for (int x = 0; x < states.GetLength(0); x++)
+                for (int x = 0; x < dimensions.x; x++)
                 {
                     // Count all spots that are occupied by floor area:
-                    if (states[x, y] == RoomState.CLEAN_FLOOR || states[x, y] == RoomState.OVERGROWN_FLOOR)
+                    if (states[GetIndex(x, y, dimensions.x)] == RoomState.CLEAN_FLOOR || states[GetIndex(x, y, dimensions.x)] == RoomState.OVERGROWN_FLOOR)
                         availableFloorSpots++;
                 }
             }
@@ -160,12 +182,12 @@ namespace DNA
             overgrownSpots = 0;
 
             // Iterate all spots:
-            for (int y = 0; y < states.GetLength(1); y++)
+            for (int y = 0; y < dimensions.y; y++)
             {
-                for (int x = 0; x < states.GetLength(0); x++)
+                for (int x = 0; x < dimensions.x; x++)
                 {
                     // Count all spots that are occupied by floor area:
-                    if (states[x, y] == RoomState.OVERGROWN_FLOOR)
+                    if (states[GetIndex(x, y, dimensions.x)] == RoomState.OVERGROWN_FLOOR)
                         overgrownSpots++;
                 }
             }
@@ -194,21 +216,26 @@ namespace DNA
             if (textureGenerator == null)
                 return;
 
-            textureGenerator.GenerateTexture(states);
+            textureGenerator.GenerateTexture(states, dimensions);
         }
 
         #endregion
 
         #region Helper Methods
 
-        public Vector2Int PositionToGrid(Vector3 position)
+        public int2 PositionToGrid(Vector3 position)
         {
             // Remap physical position inside room boundaries to state array:
-            return new Vector2Int
+            return new int2
             {
-                x = Mathf.RoundToInt(position.x.RemapExclusive(roomStartBoundary.x, roomEndBoundary.x, states.GetLength(0) - 1, 0)),
-                y = Mathf.RoundToInt(position.z.RemapExclusive(roomStartBoundary.y, roomEndBoundary.y, states.GetLength(1) - 1, 0))
+                x = Mathf.RoundToInt(position.x.RemapExclusive(roomStartBoundary.x, roomEndBoundary.x, dimensions.x - 1, 0)),
+                y = Mathf.RoundToInt(position.z.RemapExclusive(roomStartBoundary.y, roomEndBoundary.y, dimensions.y - 1, 0))
             };
+        }
+
+        public static int GetIndex(int x, int y, int xDimension)
+        {
+            return (y * xDimension) + x;
         }
 
         #endregion
