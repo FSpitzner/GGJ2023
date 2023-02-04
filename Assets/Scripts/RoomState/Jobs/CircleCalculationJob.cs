@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DNA
 {
     [BurstCompile]
-    public struct PlayerImpactCalculationJob : IJobParallelFor
+    public struct CircleCalculationJob : IJobParallelFor
     {
         [NativeDisableParallelForRestriction]
         public NativeArray<RoomState> states;
@@ -21,6 +21,10 @@ namespace DNA
         public int2 dimensions;
         [NativeDisableParallelForRestriction]
         public NativeArray<Color> pixels;
+        [ReadOnly]
+        public RoomState originState;
+        [ReadOnly]
+        public RoomState targetState;
 
         #region Main Execution
 
@@ -39,15 +43,15 @@ namespace DNA
 
         private void OvergrowSpot(int x, int y)
         {
-            // Only apply overgrowth on clean floor areas:
-            if (states[GetIndex(x, y, dimensions.x)] != RoomState.CLEAN_FLOOR)
+            // Only apply target state on areas with origin state:
+            if (states[GetIndex(x, y, dimensions.x)] != originState)
                 return;
 
-            // Update room state at impact point to overgrown state:
-            states[GetIndex(x, y, dimensions.x)] = RoomState.OVERGROWN_FLOOR;
+            // Update room state at impact point to target state:
+            states[GetIndex(x, y, dimensions.x)] = targetState;
 
             // Update texture at impact point:
-            UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
+            UpdateTexture(x, y, targetState);
         }
 
         #endregion
