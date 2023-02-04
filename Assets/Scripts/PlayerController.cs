@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace DNA
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IDamageable
     {
         [SerializeField] float impulsPowerModifier = 1f;
         [SerializeField] Rigidbody rb = null;
@@ -16,10 +17,13 @@ namespace DNA
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject projectile = null;
+        [SerializeField] GameObject contactPointPrefab;
         [SerializeField] float heightOffsetProjectile = .75f;
         [SerializeField] LayerMask groundLayermask = 0;
 
         [SerializeField] float spreadRadius = 3f;
+
+        [SerializeField] private int health = 3;
 
         private Transform owntransform = null;
         private Vector3 direction = new Vector3();
@@ -27,6 +31,8 @@ namespace DNA
         private Transform projectileTransform = null;
         private Ray groundRay;
         private RaycastHit hit;
+
+        private List<PlayerContactPoint> pointTrackList = new List<PlayerContactPoint>();
 
         private void Start()
         {
@@ -69,6 +75,27 @@ namespace DNA
             powerIndicator.fillAmount = power;
         }
 
+        public void ApplyDamage(int damage = 1)
+        {
+            health -= damage;
+
+            Debug.Log($"Player damaged; health: {health}");
+
+            if (health <= 0)
+                SceneManager.LoadScene(0);
+
+            for (int i = pointTrackList.Count - 1; i >= 0; i--)
+            {
+                if (!pointTrackList[i])
+                    pointTrackList.RemoveAt(i);
+                else
+                {
+                    transform.position = pointTrackList[i].transform.position;
+                    break;
+                }
+            }
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             groundRay.origin = projectileTransform.position;
@@ -83,6 +110,9 @@ namespace DNA
 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
+
+                PlayerContactPoint contactPoint = Instantiate(contactPointPrefab, transform.position, Quaternion.identity).GetComponent<PlayerContactPoint>();
+                pointTrackList.Add(contactPoint);
             }
         }
     }
