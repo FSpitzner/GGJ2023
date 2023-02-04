@@ -14,6 +14,9 @@ namespace DNA
         [SerializeField]
         private string percentageSuffix = "%";
 
+        [Header("Animation")]
+        private float barFillAnimationTime = 0.5f;
+
         [Header("References")]
         [SerializeField]
         private TMP_Text percentageText = null;
@@ -22,7 +25,7 @@ namespace DNA
         #endregion
 
         #region Internal Variables
-        private Tween barFillTween = null;
+        /*private Tween barFillTween = null;*/
         #endregion
 
         #region Properties
@@ -31,7 +34,7 @@ namespace DNA
             {
                 float displayPercentage = Mathf.Clamp(value, 0f, 1f);
                 percentageText.text = string.Format("{0}{1}", Mathf.Round(100f * displayPercentage).ToString(), percentageSuffix);
-                barFill.fillAmount = displayPercentage;
+                BarFill = displayPercentage;
             }
         }
 
@@ -39,7 +42,10 @@ namespace DNA
         {
             set
             {
-
+                barFill.fillAmount = value;
+                /*if (barFillTween != null)
+                    barFillTween.Kill();
+                barFillTween = barFill.DOFillAmount(value, barFillAnimationTime).SetEase(Ease.InOutExpo);*/
             }
         }
         #endregion
