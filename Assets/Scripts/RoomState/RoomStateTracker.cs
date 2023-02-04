@@ -114,7 +114,7 @@ namespace DNA
 
         #endregion
 
-        #region Player Impact
+        #region Impacts
 
         public void ApplyPlayerImpact(Vector3 impactPosition)
         {
@@ -144,18 +144,55 @@ namespace DNA
             textureGenerator.WriteToFile();
         }
 
-        /*private void OvergrowSpot(int x, int y)
+        public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
         {
-            // Only apply overgrowth on clean floor areas:
-            if (states[GetIndex(x, y, dimensions.x)] != RoomState.CLEAN_FLOOR)
-                return;
+            // Convert physical bounds of flamethrower to grid:
+            FlameGridBounds flameGridBounds = new FlameGridBounds
+            {
+                a = PositionToGrid(flameBounds.a),
+                b = PositionToGrid(flameBounds.b),
+                c = PositionToGrid(flameBounds.c),
+                d = PositionToGrid(flameBounds.d)
+            };
 
-            // Update room state at impact point to overgrown state:
-            states[GetIndex(x, y, dimensions.x)] = RoomState.OVERGROWN_FLOOR;
+            // Iterate all index values around the rectangle and check if points are inside the rectangle:
+            NativeArray<int2> indexList = new NativeArray<int2>(flameGridBounds.Width * flameGridBounds.Height, Allocator.TempJob);
+            NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
 
-            // Update texture at impact point:
-            textureGenerator.UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
-        }*/
+            /*Debug.Log("Index list length: " + indexList.Length);
+            Debug.Log("Pixels length: " + pixels.Length);
+            Debug.Log("Flame grid MinX: " + flameGridBounds.MinX);
+            Debug.Log("Flame grid MaxX: " + flameGridBounds.MaxX);
+            Debug.Log("Flame grid width: " + flameGridBounds.Width);
+            Debug.Log("Flame grid MinY: " + flameGridBounds.MinY);
+            Debug.Log("Flame grid MaxY: " + flameGridBounds.MaxY);
+            Debug.Log("Flame grid height: " + flameGridBounds.Height);*/
+
+            for (int y = 0; y < flameGridBounds.Height; y++)
+            {
+                for (int x = 0; x < flameGridBounds.Width; x++)
+                {
+                    indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(x, y);
+                }
+            }
+
+            // Initialize job:
+            FlamethrowerImpactCalculationJob job = new FlamethrowerImpactCalculationJob
+            {
+                states = states,
+                indexList = indexList,
+                bounds = flameGridBounds,
+                dimensions = dimensions,
+                pixels = pixels
+            };
+            JobHandle handle = job.Schedule(indexList.Length, 10);
+            handle.Complete();
+            indexList.Dispose();
+            textureGenerator.Pixels = pixels.ToArray();
+            pixels.Dispose();
+
+            textureGenerator.UpdateFloorMaterial();
+        }
 
         #endregion
 
@@ -221,6 +258,15 @@ namespace DNA
 
         #endregion
 
+        #region Getters
+
+        public RoomState GetState(int x, int y)
+        {
+            return states[GetIndex(x, y, dimensions.x)];
+        }
+
+        #endregion
+
         #region Helper Methods
 
         public int2 PositionToGrid(Vector3 position)
@@ -230,6 +276,16 @@ namespace DNA
             {
                 x = Mathf.RoundToInt(position.x.RemapExclusive(roomStartBoundary.x, roomEndBoundary.x, dimensions.x - 1, 0)),
                 y = Mathf.RoundToInt(position.z.RemapExclusive(roomStartBoundary.y, roomEndBoundary.y, dimensions.y - 1, 0))
+            };
+        }
+
+        public Vector3 GridToPosition(int xPosition, int yPosition)
+        {
+            return new Vector3
+            {
+                x = ((float)xPosition).RemapExclusive(dimensions.x - 1, 0, roomStartBoundary.x, roomEndBoundary.x),
+                y = 0,
+                z = ((float)yPosition).RemapExclusive(dimensions.y - 1, 0, roomStartBoundary.y, roomEndBoundary.y)
             };
         }
 

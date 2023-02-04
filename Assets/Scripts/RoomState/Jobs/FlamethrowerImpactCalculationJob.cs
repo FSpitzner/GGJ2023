@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -8,46 +7,45 @@ using UnityEngine;
 
 namespace DNA
 {
-    [BurstCompile]
-    public struct PlayerImpactCalculationJob : IJobParallelFor
+    public struct FlamethrowerImpactCalculationJob : IJobParallelFor
     {
         [NativeDisableParallelForRestriction]
         public NativeArray<RoomState> states;
         [ReadOnly]
-        public int2 centerIndex;
+        public NativeArray<int2> indexList;
         [ReadOnly]
-        public NativeList<int2> offsets;
+        public FlameGridBounds bounds;
         [ReadOnly]
         public int2 dimensions;
         [NativeDisableParallelForRestriction]
         public NativeArray<Color> pixels;
 
-        #region States
+        #region Main Execution
 
         public void Execute(int index)
         {
-            // Calculate index by using pre-calculated offset:
-            int2 targetIndex = new int2(centerIndex.x + offsets[index].x, centerIndex.y + offsets[index].y);
-
             // Skip to next loop if point is outside array boundaries:
-            if (targetIndex.x < 0 || targetIndex.x >= dimensions.x || targetIndex.y < 0 || targetIndex.y >= dimensions.y)
+            if (indexList[index].x < 0 || indexList[index].x >= dimensions.x || indexList[index].y < 0 || indexList[index].y >= dimensions.y)
                 return;
 
-            // Apply overgrowth:
-            OvergrowSpot(targetIndex.x, targetIndex.y);
+            // Check if point is inside the flamethrower hitbox:
+            if (!IsPointInRectangle(indexList[index], bounds.a, bounds.b, bounds.c, bounds.d))
+                return;
+
+            CleanSpot(indexList[index].x, indexList[index].y);
         }
 
-        private void OvergrowSpot(int x, int y)
+        private void CleanSpot(int x, int y)
         {
-            // Only apply overgrowth on clean floor areas:
-            if (states[GetIndex(x, y, dimensions.x)] != RoomState.CLEAN_FLOOR)
+            // Only apply cleaning on overgrown floor areas:
+            if (states[GetIndex(x, y, dimensions.x)] != RoomState.OVERGROWN_FLOOR)
                 return;
 
-            // Update room state at impact point to overgrown state:
-            states[GetIndex(x, y, dimensions.x)] = RoomState.OVERGROWN_FLOOR;
+            // Update room state at impact point to clean state:
+            states[GetIndex(x, y, dimensions.x)] = RoomState.CLEAN_FLOOR;
 
             // Update texture at impact point:
-            UpdateTexture(x, y, RoomState.OVERGROWN_FLOOR);
+            UpdateTexture(x, y, RoomState.CLEAN_FLOOR);
         }
 
         #endregion
@@ -83,6 +81,16 @@ namespace DNA
         #endregion
 
         #region Helper Methods
+
+        private bool IsPointInRectangle(int2 p, int2 x, int2 y, int2 z, int2 w)
+        {
+            return (IsLeft(x, y, p) > 0 && IsLeft(y, z, p) > 0 && IsLeft(z, w, p) > 0 && IsLeft(w, x, p) > 0);
+        }
+
+        private float IsLeft(int2 pointA, int2 pointB, int2 pointC)
+        {
+            return ((pointB.x - pointA.x) * (pointC.y - pointA.y) - (pointC.x - pointA.x) * (pointB.y - pointA.y));
+        }
 
         public int GetIndex(int x, int y, int xDimension)
         {
