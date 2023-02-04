@@ -25,9 +25,11 @@ namespace DNA
 
         [Header("References")]
         [SerializeField]
-        private RoomScanner scanner;
+        private RoomScanner scanner = null;
         [SerializeField]
-        private RoomTextureGenerator textureGenerator;
+        private RoomTextureGenerator textureGenerator = null;
+        [SerializeField]
+        private PercentageBar percentageBar = null;
         #endregion
 
         #region Internal Variables
@@ -179,7 +181,8 @@ namespace DNA
             overgrownPercentage = (float)overgrownSpots / (float)availableFloorSpots;
 
             // Display in UI:
-            // TODO
+            if (percentageBar != null)
+                percentageBar.Percentage = overgrownPercentage;
         }
 
         #endregion
