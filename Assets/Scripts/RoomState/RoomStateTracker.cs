@@ -212,6 +212,15 @@ namespace DNA
 
         #endregion
 
+        #region Getters
+
+        public RoomState GetState(int x, int y)
+        {
+            return states[GetIndex(x, y, dimensions.x)];
+        }
+
+        #endregion
+
         #region Helper Methods
 
         public int2 PositionToGrid(Vector3 position)
