@@ -37,7 +37,7 @@ namespace DNA
             texture.SetPixel(x, y, CalculateStateColor(state));
 
             // Write texture to file for debug purposes:
-            WriteToFile();
+            /*WriteToFile();*/
         }
 
         private Color CalculateStateColor(RoomState state)
@@ -60,7 +60,7 @@ namespace DNA
             }
         }
 
-        private void WriteToFile()
+        public void WriteToFile()
         {
             if (texture == null)
                 return;
