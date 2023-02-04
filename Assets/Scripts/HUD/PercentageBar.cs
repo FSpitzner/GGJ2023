@@ -9,6 +9,10 @@ namespace DNA
     public class PercentageBar : MonoBehaviour
     {
         #region Inspector Variables
+        [Header("Settings")]
+        [SerializeField]
+        private string percentageSuffix = "%";
+
         [Header("References")]
         [SerializeField]
         private TMP_Text percentageText = null;
@@ -21,7 +25,7 @@ namespace DNA
             set
             {
                 float displayPercentage = Mathf.Clamp(value, 0f, 1f);
-                percentageText.text = Mathf.Round(100f * displayPercentage).ToString();
+                percentageText.text = string.Format("{0}{1}", Mathf.Round(100f * displayPercentage).ToString(), percentageSuffix);
                 barFill.fillAmount = displayPercentage;
             }
         }
