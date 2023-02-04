@@ -16,7 +16,10 @@ namespace DNA
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject projectile = null;
+        [SerializeField] float heightOffsetProjectile = .75f;
         [SerializeField] LayerMask groundLayermask = 0;
+
+        [SerializeField] float spreadRadius = 3f;
 
         private Transform owntransform = null;
         private Vector3 direction = new Vector3();
@@ -72,7 +75,7 @@ namespace DNA
 
             if (Physics.Raycast(groundRay, out hit, .3f, groundLayermask))
             {
-                owntransform.position = new Vector3(owntransform.position.x, hit.point.y + .75f, owntransform.position.z);
+                owntransform.position = new Vector3(owntransform.position.x, hit.point.y + heightOffsetProjectile, owntransform.position.z);
                 roomStateTracker.ApplyPlayerImpact(hit.point, 3f);
 
                 playerMesh.SetActive(true);
