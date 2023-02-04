@@ -141,6 +141,13 @@ namespace DNA
             CalculateOvergrownPercentage();
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomStartBoundary.y), new Vector3(roomStartBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomEndBoundary.y), new Vector3(roomEndBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomEndBoundary.x, 0, roomStartBoundary.y), new Vector3(roomEndBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomStartBoundary.y), new Vector3(roomEndBoundary.x, 0, roomStartBoundary.y));
+        }
         #endregion
 
         #region Impacts
@@ -152,7 +159,6 @@ namespace DNA
 
             // Mark impact spot as overgrown:
             /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
-
             // Iterate all spots that are inside the given circle radius around the impact:
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
             CircleCalculationJob job = new CircleCalculationJob

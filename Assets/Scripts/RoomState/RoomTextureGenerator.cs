@@ -10,8 +10,7 @@ namespace DNA
     public class RoomTextureGenerator : MonoBehaviour
     {
         #region Inspector Variables
-        [SerializeField]
-        private Material floorMaterial = null;
+        [SerializeField] new Renderer renderer = null;
         #endregion
 
         #region Internal Variables
@@ -85,10 +84,8 @@ namespace DNA
 
         public void UpdateFloorMaterial()
         {
-            if (floorMaterial == null)
-                return;
-
-            floorMaterial.SetTexture("_OvergrowthMask", texture);
+            texture.Apply();
+            renderer.material.SetTexture("_OvergrowthMask", texture);
         }
 
         #endregion

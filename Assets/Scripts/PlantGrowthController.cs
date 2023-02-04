@@ -27,7 +27,7 @@ namespace DNA
 
         void Start()
         {
-            int2 dimentions = new int2(50, 50);
+            int2 dimentions = roomStateTracker.StatesDimensions;
             random = new Random(5611556);
 
             for (int i = 0; i < numberOfGrowths; i++)
@@ -61,6 +61,7 @@ namespace DNA
                 {
                     Vector3 pointPos2D = roomStateTracker.GridToPosition(growths[i].arrayPosition.x, growths[i].arrayPosition.y);
                     pointPos2D.y = 20f;
+                    ray.origin = pointPos2D;
                     if (Physics.Raycast(ray, out hit, 30f, groundMask))
                     {
                         Gizmos.DrawWireSphere(hit.point, .5f);
@@ -98,6 +99,9 @@ namespace DNA
                         {
                             Vector3 pointPos2D = roomStateTracker.GridToPosition(growths[i].arrayPosition.x, growths[i].arrayPosition.y);
                             pointPos2D.y = 20f;
+                            ray.origin = pointPos2D;
+                            Debug.Log(pointPos2D);
+
                             if (Physics.Raycast(ray, out hit, 30f, groundMask))
                             {
                                 growths[i].spawnedObject = Instantiate(growthPrefabs[random.NextInt(0, growthPrefabs.Count - 1)], hit.point, Quaternion.identity);
