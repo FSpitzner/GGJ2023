@@ -1251,6 +1251,148 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756954724}
   m_CullTransparentMesh: 1
+--- !u!1001 &757041693
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 879269196}
+    m_Modifications:
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3473150654640234390, guid: 256ed92396e01914e9cee0dbaef4e993,
+        type: 3}
+      propertyPath: m_Name
+      value: Arrow
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 256ed92396e01914e9cee0dbaef4e993, type: 3}
+--- !u!114 &757041694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3224804735143641746, guid: 256ed92396e01914e9cee0dbaef4e993,
+    type: 3}
+  m_PrefabInstance: {fileID: 757041693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a55b806845f4fa409def57d7e06ef4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &757041695 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3473150654640234389, guid: 256ed92396e01914e9cee0dbaef4e993,
+    type: 3}
+  m_PrefabInstance: {fileID: 757041693}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &765210416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765210418}
+  - component: {fileID: 765210417}
+  m_Layer: 0
+  m_Name: Plant Growth Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &765210417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765210416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff752409bfe034439858158685f22d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomStateTracker: {fileID: 57534383}
+  numberOfGrowths: 10
+  growthPrefabs:
+  - {fileID: 3629222215888817347, guid: bdd30e61e1c01314293625f94643cbb8, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!4 &765210418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765210416}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &879269192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,6 +1428,7 @@ Transform:
   - {fileID: 1690622115}
   - {fileID: 91669779}
   - {fileID: 365372163}
+  - {fileID: 757041695}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1334,13 +1477,16 @@ MonoBehaviour:
   maxPowerAfterSeconds: 1
   powerIndicator: {fileID: 1396005378}
   roomStateTracker: {fileID: 57534383}
+  plantGrowthController: {fileID: 765210417}
   playerMesh: {fileID: 429622347}
   projectile: {fileID: 1002840191}
-  contactPointPrefab: {fileID: 0}
+  contactPointPrefab: {fileID: 990667870502622747, guid: dff695f0687199d419846aa842e50cc7,
+    type: 3}
   heightOffsetProjectile: 0.75
   groundLayermask:
     serializedVersion: 2
     m_Bits: 64
+  arrow: {fileID: 757041694}
   spreadRadius: 3
   health: 3
 --- !u!1 &1002840191

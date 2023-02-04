@@ -55,8 +55,6 @@ namespace DNA
             arrow.SetScale(1);
             playerMesh.transform.forward = direction;
 
-            Debug.Log($"Player direction: {direction}");
-
             direction.y = 0.75f;
 
             if (input.JumpActive)
