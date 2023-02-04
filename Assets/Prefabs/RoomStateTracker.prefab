@@ -88,8 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b822e0761768427499c7ec98395ea53a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetOvergrowth: 0.5
+  targetValue: 0.5
   percentageBar: {fileID: 0}
+  completionPanel: {fileID: 0}
 --- !u!1 &6465676268700089820
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +125,7 @@ Transform:
   - {fileID: 6465676268682615961}
   - {fileID: 6465676268571398571}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6465676268700089823
 MonoBehaviour:
@@ -145,7 +146,7 @@ MonoBehaviour:
   flameRadius: 20
   scanner: {fileID: 6465676268700089822}
   textureGenerator: {fileID: 6465676268700089821}
-  levelProgress: {fileID: 0}
+  levelProgress: {fileID: 6465676268682615962}
 --- !u!114 &6465676268700089822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,4 +175,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c98a09dee3578447a0cb1d71974f890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorMaterial: {fileID: 0}
+  renderer: {fileID: 0}

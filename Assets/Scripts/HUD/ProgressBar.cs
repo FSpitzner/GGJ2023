@@ -15,11 +15,14 @@ namespace DNA
         private string percentageSuffix = "%";
 
         [Header("Animation")]
-        private float barFillAnimationTime = 0.5f;
+        [SerializeField]
+        private Color targetIndicatorPrimaryColor = Color.green;
         [SerializeField]
         private Color targetIndicatorSecondaryColor = Color.red;
         [SerializeField]
-        private Vector3 targetIndicatorIncreasedSize = new Vector3(2f, 2f, 2f);
+        private Vector3 targetIndicatorDefaultScale = new Vector3(1f, 1f, 1f);
+        [SerializeField]
+        private Vector3 targetIndicatorIncreasedScale = new Vector3(2f, 2f, 2f);
         [SerializeField]
         private float targetIndicatorColorAnimationSpeed = 1f;
 
@@ -35,7 +38,6 @@ namespace DNA
         #endregion
 
         #region Internal Variables
-        /*private Tween barFillTween = null;*/
         #endregion
 
         #region Properties
@@ -43,7 +45,7 @@ namespace DNA
             set
             {
                 float displayPercentage = Mathf.Clamp(value, 0f, 1f);
-                percentageText.text = string.Format("{0}{1}", Mathf.Round(100f * displayPercentage).ToString(), percentageSuffix);
+                percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * displayPercentage).ToString(), percentageSuffix);
                 BarFill = displayPercentage;
             }
         }
@@ -72,18 +74,35 @@ namespace DNA
 
         private void Start()
         {
-            
+            InitializeAnimations();
         }
 
         private void InitializeAnimations()
         {
             // Loop color change of target indicator:
-            targetIndicator.image.DOColor(targetIndicatorSecondaryColor, targetIndicatorColorAnimationSpeed / 4f).SetLoops(-1);
+            Sequence colorSequence = DOTween.Sequence();
+            colorSequence.Append(targetIndicator.image.DOColor(targetIndicatorSecondaryColor, targetIndicatorColorAnimationSpeed));
+            colorSequence.Append(targetIndicator.image.DOColor(targetIndicatorPrimaryColor, targetIndicatorColorAnimationSpeed));
+            colorSequence.SetLoops(-1);
 
             // Scale up at start:
-            
+            Sequence scaleSequence = DOTween.Sequence();
+            scaleSequence.Append(barTransform.DOScale(targetIndicatorIncreasedScale, 0.5f).SetEase(Ease.OutExpo));
+
+            // Scale back down to base size:
+            scaleSequence.Append(barTransform.DOScale(targetIndicatorDefaultScale, 1f).SetEase(Ease.OutExpo).SetDelay(2f));
+
+            // Move back and forth in sync with scaling:
+            Sequence moveSequence = DOTween.Sequence();
+            moveSequence.Append(barTransform.DOAnchorPosY(-400f, 0.5f).SetEase(Ease.OutExpo));
+            moveSequence.Append(barTransform.DOAnchorPosY(-50f, 1f).SetEase(Ease.OutExpo).SetDelay(2f));
         }
 
         #endregion
+
+        public void Hide()
+        {
+            barTransform.DOAnchorPosY(200f, 1f).SetEase(Ease.InExpo);
+        }
     }
 }
