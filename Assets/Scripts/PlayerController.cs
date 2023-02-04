@@ -14,6 +14,7 @@ namespace DNA
         [SerializeField] float maxPowerAfterSeconds = 2f;
         [SerializeField] Image powerIndicator = null;
         [SerializeField] RoomStateTracker roomStateTracker = null;
+        [SerializeField] PlantGrowthController plantGrowthController = null;
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject projectile = null;
@@ -110,6 +111,8 @@ namespace DNA
 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
+
+                plantGrowthController.CheckForGrowth();
 
                 PlayerContactPoint contactPoint = Instantiate(contactPointPrefab, transform.position, Quaternion.identity).GetComponent<PlayerContactPoint>();
                 pointTrackList.Add(contactPoint);
