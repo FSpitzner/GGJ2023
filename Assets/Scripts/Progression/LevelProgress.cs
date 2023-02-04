@@ -15,10 +15,13 @@ namespace DNA
         [Header("References")]
         [SerializeField]
         private ProgressBar percentageBar = null;
+        [SerializeField]
+        private CompletionPanel completionPanel = null;
         #endregion
 
         #region Internal Variables
         private float progress = 0f;
+        private bool gameIsRunning = true;
         #endregion
 
         #region Properties
@@ -38,12 +41,30 @@ namespace DNA
 
         #endregion
 
-        #region UI
+        #region Progress Checks
 
         private void UpdateProgress()
         {
+            // Update UI:
             if (percentageBar != null)
                 percentageBar.Percentage = progress;
+
+            // Check if level is completed:
+            if (gameIsRunning && progress >= targetValue)
+                CompleteLevel();
+        }
+
+        private void CompleteLevel()
+        {
+            gameIsRunning = false;
+
+            // Hide progress bar:
+            if (percentageBar != null)
+                percentageBar.Hide();
+
+            // Display completion message:
+            if (completionPanel != null)
+                completionPanel.Display();
         }
 
         #endregion

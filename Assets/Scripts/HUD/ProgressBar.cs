@@ -45,7 +45,7 @@ namespace DNA
             set
             {
                 float displayPercentage = Mathf.Clamp(value, 0f, 1f);
-                percentageText.text = string.Format("{0}{1}", Mathf.Round(100f * displayPercentage).ToString(), percentageSuffix);
+                percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * displayPercentage).ToString(), percentageSuffix);
                 BarFill = displayPercentage;
             }
         }
@@ -99,5 +99,10 @@ namespace DNA
         }
 
         #endregion
+
+        public void Hide()
+        {
+            barTransform.DOAnchorPosY(200f, 1f).SetEase(Ease.InExpo);
+        }
     }
 }

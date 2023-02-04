@@ -4270,6 +4270,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf381720f769004688cd005a9752c5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1588032546 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2333295447829734141, guid: d2a5d04183fc1564baa1516208e4af04,
+    type: 3}
+  m_PrefabInstance: {fileID: 1588032544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed60d5353a48344b80b9ab783cd0a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1619782983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5164,6 +5176,11 @@ PrefabInstance:
       propertyPath: percentageBar
       value: 
       objectReference: {fileID: 1588032545}
+    - target: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
+        type: 3}
+      propertyPath: completionPanel
+      value: 
+      objectReference: {fileID: 1588032546}
     - target: {fileID: 6465676268700089792, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
       propertyPath: m_RootOrder
@@ -5231,11 +5248,6 @@ PrefabInstance:
       objectReference: {fileID: 2089413237}
     - target: {fileID: 6465676268700089823, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
-      propertyPath: levelProgress
-      value: 
-      objectReference: {fileID: 2038438021}
-    - target: {fileID: 6465676268700089823, guid: 3b09386c5ca32254194f93d537d8c4cf,
-        type: 3}
       propertyPath: roomEndBoundary.x
       value: 31
       objectReference: {fileID: 0}
@@ -5259,18 +5271,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b09386c5ca32254194f93d537d8c4cf, type: 3}
---- !u!114 &2038438021 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2038438020}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b822e0761768427499c7ec98395ea53a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2044660473
 GameObject:
   m_ObjectHideFlags: 0
