@@ -36,8 +36,6 @@ namespace DNA
         {
             // Create empty texture with dimensions matching the state array:
             texture = new Texture2D(dimensions.x, dimensions.y, TextureFormat.RGB24, false);
-            Debug.Log("Dimensions: " + dimensions);
-            Debug.Log("States length: " + states.Length);
 
             // Iterate over every pixel in texture:
             for (int y = 0; y < texture.height; y++)
@@ -48,8 +46,6 @@ namespace DNA
                     texture.SetPixel(x, y, CalculateStateColor(states[RoomStateTracker.GetIndex(x, y, dimensions.x)]));
                 }
             }
-
-            Debug.Log("Texture size: " + texture.width + " x " + texture.height);
 
             // Write texture to file for debug purposes:
             WriteToFile();
