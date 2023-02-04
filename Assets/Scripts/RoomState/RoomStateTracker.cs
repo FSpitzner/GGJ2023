@@ -158,9 +158,19 @@ namespace DNA
             // Iterate all index values around the rectangle and check if points are inside the rectangle:
             NativeArray<int2> indexList = new NativeArray<int2>(flameGridBounds.Width * flameGridBounds.Height, Allocator.TempJob);
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
-            for (int y = flameGridBounds.MinY; y <= flameGridBounds.MaxY; y++)
+
+            /*Debug.Log("Index list length: " + indexList.Length);
+            Debug.Log("Pixels length: " + pixels.Length);
+            Debug.Log("Flame grid MinX: " + flameGridBounds.MinX);
+            Debug.Log("Flame grid MaxX: " + flameGridBounds.MaxX);
+            Debug.Log("Flame grid width: " + flameGridBounds.Width);
+            Debug.Log("Flame grid MinY: " + flameGridBounds.MinY);
+            Debug.Log("Flame grid MaxY: " + flameGridBounds.MaxY);
+            Debug.Log("Flame grid height: " + flameGridBounds.Height);*/
+
+            for (int y = 0; y < flameGridBounds.Height; y++)
             {
-                for (int x = flameGridBounds.MinX; x <= flameGridBounds.MaxX; x++)
+                for (int x = 0; x < flameGridBounds.Width; x++)
                 {
                     indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(x, y);
                 }
@@ -183,6 +193,7 @@ namespace DNA
 
             textureGenerator.UpdateFloorMaterial();
         }
+
         #endregion
 
         #region Counting
