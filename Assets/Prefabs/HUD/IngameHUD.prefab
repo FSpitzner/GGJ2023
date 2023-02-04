@@ -144,6 +144,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   percentageSuffix: '%'
+  targetIndicatorSecondaryColor: {r: 1, g: 0, b: 0, a: 1}
+  targetIndicatorIncreasedSize: {x: 2, y: 2, z: 2}
+  targetIndicatorColorAnimationSpeed: 1
+  barTransform: {fileID: 3317867541185850292}
   percentageText: {fileID: 3317867542584521984}
   barFill: {fileID: 3317867542084287874}
   targetIndicator: {fileID: 863816598210187802}
@@ -159,7 +163,7 @@ GameObject:
   - component: {fileID: 3317867541323653684}
   - component: {fileID: 3317867541323653685}
   m_Layer: 5
-  m_Name: Empty
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
