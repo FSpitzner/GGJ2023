@@ -180,6 +180,8 @@ namespace DNA
             indexList.Dispose();
             textureGenerator.Pixels = pixels.ToArray();
             pixels.Dispose();
+
+            textureGenerator.UpdateFloorMaterial();
         }
         #endregion
 
