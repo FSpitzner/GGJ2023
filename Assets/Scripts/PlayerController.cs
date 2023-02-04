@@ -22,6 +22,8 @@ namespace DNA
         [SerializeField] float heightOffsetProjectile = .75f;
         [SerializeField] LayerMask groundLayermask = 0;
 
+        [SerializeField] private Arrow arrow;
+
         [SerializeField] float spreadRadius = 3f;
 
         [SerializeField] private int health = 3;
@@ -45,7 +47,17 @@ namespace DNA
 
         void Update()
         {
-            direction = new Vector3(input.Direction.x, 0.75f, input.Direction.y);
+            direction = new Vector3(input.Direction.x, 0, input.Direction.y);
+            if (direction.magnitude <= 0.1f)
+                return;
+
+            arrow.SetDirection(direction);
+            arrow.SetScale(1);
+            playerMesh.transform.forward = direction;
+
+            Debug.Log($"Player direction: {direction}");
+
+            direction.y = 0.75f;
 
             if (input.JumpActive)
             {
@@ -66,14 +78,18 @@ namespace DNA
 
         void Jump(Vector3 direction, float power)
         {
+            direction = new Vector3(input.Direction.x, 0.75f, input.Direction.y);
+
             projectile.SetActive(true);
             playerMesh.SetActive(false);
+            arrow.SetActive(false);
             rb.AddRelativeForce(direction * power * impulsPowerModifier, ForceMode.Impulse);
         }
 
         void UpdateIndicator(float power)
         {
             powerIndicator.fillAmount = power;
+            arrow.SetScale(1 + power);
         }
 
         public void ApplyDamage(int damage = 1)
@@ -108,6 +124,7 @@ namespace DNA
 
                 playerMesh.SetActive(true);
                 projectile.SetActive(false);
+                arrow.SetActive(true);
 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
@@ -116,6 +133,12 @@ namespace DNA
 
                 PlayerContactPoint contactPoint = Instantiate(contactPointPrefab, transform.position, Quaternion.identity).GetComponent<PlayerContactPoint>();
                 pointTrackList.Add(contactPoint);
+
+                if(pointTrackList.Count > 5)
+                {
+                    Destroy(pointTrackList[0].gameObject);
+                    pointTrackList.RemoveAt(0);
+                }
             }
         }
     }
