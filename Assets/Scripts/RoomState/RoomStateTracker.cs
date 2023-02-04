@@ -35,7 +35,7 @@ namespace DNA
         [SerializeField]
         private RoomTextureGenerator textureGenerator = null;
         [SerializeField]
-        private PercentageBar percentageBar = null;
+        private LevelProgress levelProgress = null;
         #endregion
 
         #region Internal Variables
@@ -141,6 +141,13 @@ namespace DNA
             CalculateOvergrownPercentage();
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomStartBoundary.y), new Vector3(roomStartBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomEndBoundary.y), new Vector3(roomEndBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomEndBoundary.x, 0, roomStartBoundary.y), new Vector3(roomEndBoundary.x, 0, roomEndBoundary.y));
+            Gizmos.DrawLine(new Vector3(roomStartBoundary.x, 0, roomStartBoundary.y), new Vector3(roomEndBoundary.x, 0, roomStartBoundary.y));
+        }
         #endregion
 
         #region Impacts
@@ -152,7 +159,6 @@ namespace DNA
 
             // Mark impact spot as overgrown:
             /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
-            Debug.Log("Test 1");
             // Iterate all spots that are inside the given circle radius around the impact:
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
             CircleCalculationJob job = new CircleCalculationJob
@@ -171,7 +177,6 @@ namespace DNA
             /*textureGenerator.PixelData = pixels;*/
             pixels.Dispose();
 
-            Debug.Log("Test 2");
             textureGenerator.UpdateFloorMaterial();
             textureGenerator.WriteToFile();
         }
@@ -298,8 +303,8 @@ namespace DNA
             overgrownPercentage = (float)overgrownSpots / (float)availableFloorSpots;
 
             // Display in UI:
-            if (percentageBar != null)
-                percentageBar.Percentage = overgrownPercentage;
+            if (levelProgress != null)
+                levelProgress.Progress = overgrownPercentage;
         }
 
         #endregion
