@@ -266,6 +266,16 @@ namespace DNA
             };
         }
 
+        public Vector3 GridToPosition(int xPosition, int yPosition)
+        {
+            return new Vector3
+            {
+                x = ((float)xPosition).RemapExclusive(dimensions.x - 1, 0, roomStartBoundary.x, roomEndBoundary.x),
+                y = 0,
+                z = ((float)yPosition).RemapExclusive(dimensions.y - 1, 0, roomStartBoundary.y, roomEndBoundary.y)
+            };
+        }
+
         public static int GetIndex(int x, int y, int xDimension)
         {
             return (y * xDimension) + x;
