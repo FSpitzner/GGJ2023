@@ -28,6 +28,9 @@ namespace DNA
         [SerializeField]
         [Min(1)]
         private int flameRadius = 1;
+        [SerializeField]
+        [Min(1)]
+        private int bombRadius = 1;
 
         [Header("References")]
         [SerializeField]
@@ -46,6 +49,7 @@ namespace DNA
         private float overgrownPercentage = 0f;
         private NativeList<int2> playerCircleOffsets;
         private NativeList<int2> flameCircleOffsets;
+        private NativeList<int2> bombCircleOffsets;
         #endregion
 
         #region Properties
@@ -71,6 +75,7 @@ namespace DNA
             // Pre-calculate offset index values to be accessed to create circular pattern in the array:
             CalculatePlayerCircleOffsets();
             CalculateFlameCircleOffsets();
+            CalculateBombCircleOffsets();
         }
 
         private void CalculatePlayerCircleOffsets()
@@ -119,6 +124,29 @@ namespace DNA
             }
         }
 
+        private void CalculateBombCircleOffsets()
+        {
+            // Pre-calculate offset index values to be accessed to create circular pattern in the array:
+            bombCircleOffsets = new NativeList<int2>(Allocator.Persistent);
+            int threshold = bombRadius * bombRadius;
+            int2 vec = new int2();
+            for (int i = 0; i < bombRadius; i++)
+            {
+                vec.x = i;
+                for (int j = 0; j < bombRadius; j++)
+                {
+                    if (i * i + j * j < threshold)
+                    {
+                        vec.y = j;
+                        bombCircleOffsets.Add(vec); vec.x = -vec.x; // i,j
+                        bombCircleOffsets.Add(vec); vec.y = -vec.y; // -i,j
+                        bombCircleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
+                        bombCircleOffsets.Add(vec);                 // i,-j
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Destroy
@@ -150,7 +178,7 @@ namespace DNA
         }
         #endregion
 
-        #region Impacts
+        #region Circle Impacts
 
         public void ApplyPlayerImpact(Vector3 impactPosition)
         {
@@ -207,55 +235,31 @@ namespace DNA
             /*textureGenerator.WriteToFile();*/
         }
 
-        /*public void ApplyFlamethrowerImpact(FlameBounds flameBounds)
+        public void ApplyBombCircle(Vector3 impactPosition)
         {
-            // Convert physical bounds of flamethrower to grid:
-            FlameGridBounds flameGridBounds = new FlameGridBounds
-            {
-                a = PositionToGrid(flameBounds.a),
-                b = PositionToGrid(flameBounds.b),
-                c = PositionToGrid(flameBounds.c),
-                d = PositionToGrid(flameBounds.d)
-            };
+            // Remap impact position to array index:
+            int2 impactIndex = PositionToGrid(impactPosition);
 
-            // Iterate all index values around the rectangle and check if points are inside the rectangle:
-            NativeArray<int2> indexList = new NativeArray<int2>(flameGridBounds.Width * flameGridBounds.Height, Allocator.TempJob);
+            // Iterate all spots that are inside the given circle radius around the impact:
             NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
-
-            Debug.Log("Index list length: " + indexList.Length);
-            Debug.Log("Pixels length: " + pixels.Length);
-            Debug.Log("Flame grid MinX: " + flameGridBounds.MinX);
-            Debug.Log("Flame grid MaxX: " + flameGridBounds.MaxX);
-            Debug.Log("Flame grid width: " + flameGridBounds.Width);
-            Debug.Log("Flame grid MinY: " + flameGridBounds.MinY);
-            Debug.Log("Flame grid MaxY: " + flameGridBounds.MaxY);
-            Debug.Log("Flame grid height: " + flameGridBounds.Height);
-
-            for (int y = 0; y < flameGridBounds.Height; y++)
-            {
-                for (int x = 0; x < flameGridBounds.Width; x++)
-                {
-                    indexList[GetIndex(x, y, flameGridBounds.Width)] = new int2(flameGridBounds.MinX + x, flameGridBounds.MinY + y);
-                }
-            }
-
-            // Initialize job:
-            FlamethrowerImpactCalculationJob job = new FlamethrowerImpactCalculationJob
+            CircleCalculationJob job = new CircleCalculationJob
             {
                 states = states,
-                indexList = indexList,
-                bounds = flameGridBounds,
+                centerIndex = impactIndex,
+                offsets = bombCircleOffsets,
                 dimensions = dimensions,
-                pixels = pixels
+                pixels = pixels,
+                originState = RoomState.OVERGROWN_FLOOR,
+                targetState = RoomState.CLEAN_FLOOR
             };
-            JobHandle handle = job.Schedule(indexList.Length, 10);
+            JobHandle handle = job.Schedule(bombCircleOffsets.Length, 10);
             handle.Complete();
-            indexList.Dispose();
             textureGenerator.Pixels = pixels.ToArray();
             pixels.Dispose();
 
             textureGenerator.UpdateFloorMaterial();
-        }*/
+            /*textureGenerator.WriteToFile();*/
+        }
 
         #endregion
 

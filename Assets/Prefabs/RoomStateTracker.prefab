@@ -144,6 +144,7 @@ MonoBehaviour:
   scanDensity: 10
   playerImpactRadius: 50
   flameRadius: 20
+  bombRadius: 80
   scanner: {fileID: 6465676268700089822}
   textureGenerator: {fileID: 6465676268700089821}
   levelProgress: {fileID: 6465676268682615962}
