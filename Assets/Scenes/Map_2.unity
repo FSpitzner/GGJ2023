@@ -313,6 +313,11 @@ PrefabInstance:
       propertyPath: hud
       value: 
       objectReference: {fileID: 2086514777}
+    - target: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
+        type: 3}
+      propertyPath: targetValue
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 6465676268700089792, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
       propertyPath: m_RootOrder
@@ -4080,12 +4085,12 @@ PrefabInstance:
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000037785618
+      value: -0.000000037785618
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000026808177
+      value: 0.000000026808177
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}

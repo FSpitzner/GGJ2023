@@ -2248,6 +2248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963c99b1b3626854199e3cdf223a8f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: 0, y: 150, z: 0}
+  positionOffset: {x: 0, y: 100, z: 0}
   barFill: {fileID: 5688754181577329193}
   barTransform: {fileID: 6419672291342342888}

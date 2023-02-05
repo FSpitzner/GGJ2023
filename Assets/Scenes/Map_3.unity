@@ -5530,6 +5530,11 @@ PrefabInstance:
       propertyPath: hud
       value: 
       objectReference: {fileID: 478056803}
+    - target: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
+        type: 3}
+      propertyPath: targetValue
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 6465676268700089792, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
       propertyPath: m_RootOrder

@@ -36,6 +36,9 @@ namespace DNA
 
         [SerializeField] private int health = 3;
 
+        [SerializeField] private AudioSource shootAudio = null;
+        [SerializeField] private AudioSource landAudio = null;
+
         private Transform owntransform = null;
         private Vector3 direction = new Vector3();
         private float powerTimer = 0f;
@@ -213,6 +216,8 @@ namespace DNA
                     Destroy(pointTrackList[0].gameObject);
                     pointTrackList.RemoveAt(0);
                 }
+
+                landAudio.Play();
 
                 flying = false;
             }
