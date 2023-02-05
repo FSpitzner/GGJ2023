@@ -129,6 +129,8 @@ namespace DNA
 
         private IEnumerator JumpNumerator(Vector3 direction, float power)
         {
+            launchEffect.Play();
+
             while(throwShapeKeyPos < 100)
             {
                 throwShapeKeyPos += throwShapeKeySpeed * Time.deltaTime;
