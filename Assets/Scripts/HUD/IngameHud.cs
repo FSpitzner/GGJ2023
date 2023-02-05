@@ -11,6 +11,8 @@ namespace DNA
         [SerializeField]
         private ProgressBar progressBar = null;
         [SerializeField]
+        private JumpPowerBar jumpPowerBar = null;
+        [SerializeField]
         private CompletionPanel completionPanel = null;
         [SerializeField]
         private ScreenTransition screenTransition = null;
@@ -20,6 +22,7 @@ namespace DNA
 
         #region Properties
         public ProgressBar ProgressBar { get { return progressBar; } }
+        public JumpPowerBar JumpPowerBar { get { return jumpPowerBar; } }
         public CompletionPanel CompletionPanel { get { return completionPanel; } }
         public ScreenTransition ScreenTransition { get { return screenTransition; } }
         public ControlsPanel ControlsPanel { get { return controlsPanel; } }
