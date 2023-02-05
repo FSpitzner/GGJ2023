@@ -241,7 +241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelScenes:
-  - Jonas_Testscene
+  - Map_1
+  - Map_2
+  - Map_3
   finalScene: FinalScene
 --- !u!4 &1367625328
 Transform:

@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/_Preload.unity
     guid: 4b848e81d6997414d9d08eb80a70a463
+  - enabled: 1
+    path: Assets/Scenes/Map_1.unity
+    guid: 9095fec8a4968ba42b168dbe3cae293b
+  - enabled: 1
+    path: Assets/Scenes/Map_2.unity
+    guid: b78aa5275323075419ce38be58f4a564
+  - enabled: 1
+    path: Assets/Scenes/Map_3.unity
+    guid: 8d6650ce5b4be1343bf27903ed11f9b0
   m_configObjects: {}

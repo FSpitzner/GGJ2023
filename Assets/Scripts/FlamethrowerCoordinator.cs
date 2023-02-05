@@ -24,7 +24,7 @@ namespace DNA
 
         void Update()
         {
-            if (flamethrowers == null)
+            if (flamethrowers == null || flamethrowers.Length == 0)
                 return;
 
             flamethrowers[index].UseFlamethrower();
