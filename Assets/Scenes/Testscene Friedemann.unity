@@ -326,6 +326,7 @@ MonoBehaviour:
   scanDensity: 20
   playerImpactRadius: 50
   flameRadius: 1
+  bombRadius: 1
   scanner: {fileID: 57534382}
   textureGenerator: {fileID: 57534381}
   levelProgress: {fileID: 0}
@@ -1054,13 +1055,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomStateTracker: {fileID: 57534383}
-  point1: {fileID: 1994356891}
-  point2: {fileID: 2095978965}
-  point3: {fileID: 1162521966}
-  point4: {fileID: 558384750}
-  cleaningMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &632957558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,6 +1532,8 @@ MonoBehaviour:
     m_Bits: 64
   arrow: {fileID: 757041694}
   spreadRadius: 3
+  tiltShapeKeySpeed: 1
+  throwShapeKeySpeed: 1
   health: 3
 --- !u!1 &1002840191
 GameObject:
