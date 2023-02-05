@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2599194280799643370
 MonoBehaviour:
@@ -47,7 +47,7 @@ MonoBehaviour:
   roomStateTracker: {fileID: 0}
   numberOfGrowths: 10
   growthPrefabs:
-  - {fileID: 3629222215888817347, guid: bdd30e61e1c01314293625f94643cbb8, type: 3}
+  - {fileID: 4778041835849978836, guid: 6207501a54bd08c43b98eea2e8c7bb1a, type: 3}
   groundMask:
     serializedVersion: 2
     m_Bits: 64
