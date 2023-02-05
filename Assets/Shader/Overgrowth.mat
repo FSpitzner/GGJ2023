@@ -84,6 +84,7 @@ Material:
     m_Floats:
     - _HeightStrength: 0
     - _NoiseScale: 15
+    - _OvergrowthSmoothness: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
