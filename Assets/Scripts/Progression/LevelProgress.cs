@@ -14,9 +14,7 @@ namespace DNA
 
         [Header("References")]
         [SerializeField]
-        private ProgressBar percentageBar = null;
-        [SerializeField]
-        private CompletionPanel completionPanel = null;
+        private IngameHud hud = null;
         #endregion
 
         #region Internal Variables
@@ -33,9 +31,9 @@ namespace DNA
         private void Start()
         {
             // Display target indicator in progress bar:
-            if (percentageBar != null)
+            if (hud != null && hud.ProgressBar != null)
             {
-                percentageBar.TargetValue = targetValue;
+                hud.ProgressBar.TargetValue = targetValue;
             }
         }
 
@@ -46,8 +44,8 @@ namespace DNA
         private void UpdateProgress()
         {
             // Update UI:
-            if (percentageBar != null)
-                percentageBar.Percentage = progress;
+            if (hud != null && hud.ProgressBar != null)
+                hud.ProgressBar.Percentage = progress;
 
             // Check if level is completed:
             if (gameIsRunning && progress >= targetValue)
@@ -59,12 +57,29 @@ namespace DNA
             gameIsRunning = false;
 
             // Hide progress bar:
-            if (percentageBar != null)
-                percentageBar.Hide();
+            if (hud != null && hud.ProgressBar != null)
+                hud.ProgressBar.Hide();
 
             // Display completion message:
-            if (completionPanel != null)
-                completionPanel.Display();
+            if (hud != null && hud.CompletionPanel != null)
+                hud.CompletionPanel.Display();
+
+            // Invoke transition to next level:
+            Invoke(nameof(EndLevel), 3f);
+            Invoke(nameof(LoadNextLevel), 6f);
+        }
+
+        private void EndLevel()
+        {
+            // Fade screen to black:
+            if (hud != null && hud.ScreenTransition != null)
+                hud.ScreenTransition.FadeToBlack();
+        }
+
+        private void LoadNextLevel()
+        {
+            if (References.progressionManager != null)
+                References.progressionManager.LoadNextLevel();
         }
 
         #endregion

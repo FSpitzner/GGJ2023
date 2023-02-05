@@ -12,6 +12,8 @@ namespace DNA
         #region Inspector Variables
         [Header("Settings")]
         [SerializeField]
+        private float startAnimationDelay = 1f;
+        [SerializeField]
         private string percentageSuffix = "%";
 
         [Header("Animation")]
@@ -78,7 +80,7 @@ namespace DNA
 
         private void Start()
         {
-            InitializeAnimations();
+            Invoke(nameof(InitializeAnimations), startAnimationDelay);
         }
 
         private void InitializeAnimations()

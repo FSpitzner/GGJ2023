@@ -156,6 +156,7 @@ namespace DNA
             states.Dispose();
             playerCircleOffsets.Dispose();
             flameCircleOffsets.Dispose();
+            bombCircleOffsets.Dispose();
         }
 
         #endregion
