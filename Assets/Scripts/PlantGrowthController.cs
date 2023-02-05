@@ -19,11 +19,13 @@ namespace DNA
         [SerializeField] int numberOfGrowths = 10;
         [SerializeField] List<GameObject> growthPrefabs = new List<GameObject>();
         [SerializeField] LayerMask groundMask = 0;
+        [SerializeField] float updateTick = .2f;
 
         Dictionary<int, GrowthTracker> growths = new Dictionary<int, GrowthTracker>();
         Random random;
         Ray ray = new Ray(Vector3.zero, Vector3.down);
         RaycastHit hit;
+        Coroutine regularUpdate;
 
         void Start()
         {
@@ -50,6 +52,14 @@ namespace DNA
                     spawnedObject = null
                 });
             }
+
+            regularUpdate = StartCoroutine(CheckGround(updateTick));
+        }
+
+        private void OnDestroy()
+        {
+            if (regularUpdate != null)
+                StopCoroutine(regularUpdate);
         }
 
         private void OnDrawGizmos()
@@ -80,9 +90,9 @@ namespace DNA
 
         private void CheckGrowthState()
         {
-            for (int i = 0; i < numberOfGrowths; i++)
+            for (int i = 0; i < growths.Count; i++)
             {
-                RoomState stateAtPosition = RoomState.EMPTY;
+                RoomState stateAtPosition = roomStateTracker.GetState(growths[i].arrayPosition.x, growths[i].arrayPosition.y);
 
                 switch (stateAtPosition)
                 {
@@ -100,7 +110,6 @@ namespace DNA
                             Vector3 pointPos2D = roomStateTracker.GridToPosition(growths[i].arrayPosition.x, growths[i].arrayPosition.y);
                             pointPos2D.y = 20f;
                             ray.origin = pointPos2D;
-                            Debug.Log(pointPos2D);
 
                             if (Physics.Raycast(ray, out hit, 30f, groundMask))
                             {
@@ -117,6 +126,16 @@ namespace DNA
             yield return new WaitForSeconds(delay);
 
             a.Invoke();
+        }
+
+        IEnumerator CheckGround(float updateTick)
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(updateTick);
+
+                CheckGrowthState();
+            }
         }
     }
 }

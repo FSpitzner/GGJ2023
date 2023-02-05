@@ -3,7 +3,12 @@ guid: 7fd46c0b7f18cbe46b619d388c3bd740
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Flamethrower_robot
+    second: {fileID: 2100000, guid: 57ea053fdcf239e4ba5d62b378b29f5b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -89,7 +94,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.0033
+    globalScale: 0.33
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
