@@ -182,7 +182,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionTimer: 5
   killzone: {fileID: 6326958429329659776}
-  xplosionPrefab: {fileID: 0}
+  xplosionPrefab: {fileID: 1881786246079640520, guid: db6513084caa03b4fb1dbe53e15e9edb,
+    type: 3}
 --- !u!1 &3933943784989270969
 GameObject:
   m_ObjectHideFlags: 0
