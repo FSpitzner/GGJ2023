@@ -68,7 +68,7 @@ GameObject:
   - component: {fileID: 1455430508792591958}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +151,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   arrow: {fileID: 9009472298302427068}
+  onJumpEvent:
+    m_PersistentCalls:
+      m_Calls: []
   spreadRadius: 3
   tiltShapeKeySpeed: 400
   throwShapeKeySpeed: 1000
