@@ -7,10 +7,11 @@ namespace DNA
     public class Flamethrower : MonoBehaviour
     {
         [SerializeField] RoomStateTracker roomStateTracker = null;
+        [SerializeField] Transform cleanPoint;
 
         public void UseFlamethrower()
         {
-            roomStateTracker.ApplyFlamethrowerCircle(transform.position);
+            roomStateTracker.ApplyFlamethrowerCircle(cleanPoint.position);
         }
     }
 }
