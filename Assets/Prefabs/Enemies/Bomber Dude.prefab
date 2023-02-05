@@ -56,7 +56,7 @@ MonoBehaviour:
   floorMask:
     serializedVersion: 2
     m_Bits: 64
-  splineSpeed: 0.3
+  splineSpeed: 0.025
   navSpeed: 3
   doTime: 3
   searchesPerFrame: 3
