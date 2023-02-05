@@ -5184,11 +5184,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5893203654495883901, guid: 16412e92301b2b541a84da6638c15a94,
         type: 3}
-      propertyPath: input
-      value: 
-      objectReference: {fileID: 1934366355}
-    - target: {fileID: 5893203654495883901, guid: 16412e92301b2b541a84da6638c15a94,
-        type: 3}
       propertyPath: roomStateTracker
       value: 
       objectReference: {fileID: 667136189}
@@ -5305,34 +5300,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5893203654495883899, guid: 16412e92301b2b541a84da6638c15a94,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1934366355}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16412e92301b2b541a84da6638c15a94, type: 3}
---- !u!1 &1934366354 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5893203654495883899, guid: 16412e92301b2b541a84da6638c15a94,
-    type: 3}
-  m_PrefabInstance: {fileID: 1934366353}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1934366355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1934366354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be499022bd66d1a4aa7c66e94031b735, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  directionInput: {fileID: -6487877868376286123, guid: bbb5b0b533d6ba449a66ee12ac109a47,
-    type: 3}
-  jumpButton: {fileID: -1849155870186749340, guid: bbb5b0b533d6ba449a66ee12ac109a47,
-    type: 3}
 --- !u!4 &1934366356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5893203654495883903, guid: 16412e92301b2b541a84da6638c15a94,
@@ -6162,7 +6131,7 @@ PrefabInstance:
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
@@ -6172,22 +6141,22 @@ PrefabInstance:
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.85851616
+      value: 0.81558275
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.51278657
+      value: 0.57864046
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -3.8552662e-16
+      value: -0.000000031379244
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 4.5427393e-17
+      value: 0.000000022262977
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
