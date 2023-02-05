@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using UnityEngine.Events;
 
 namespace DNA
 {
@@ -26,6 +27,8 @@ namespace DNA
         [SerializeField] LayerMask groundLayermask = 0;
 
         [SerializeField] private Arrow arrow;
+
+        [SerializeField] UnityEvent onJumpEvent = new UnityEvent();
 
         [SerializeField] float spreadRadius = 3f;
         [SerializeField] private float tiltShapeKeySpeed = 1f;
@@ -125,6 +128,7 @@ namespace DNA
                 References.ingameHud.ControlsPanel.RegisterPlayerMovement();
 
             StartCoroutine(JumpNumerator(direction, power));
+            onJumpEvent.Invoke();
         }
 
         private IEnumerator JumpNumerator(Vector3 direction, float power)
