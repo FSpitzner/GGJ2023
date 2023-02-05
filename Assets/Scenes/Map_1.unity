@@ -1103,6 +1103,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdeeec62fd9471b4ca5c880f9769d1b2, type: 3}
+--- !u!114 &422035368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7074611425001430834, guid: d2a5d04183fc1564baa1516208e4af04,
+    type: 3}
+  m_PrefabInstance: {fileID: 1588032544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23355b6137e1a50458e2db633f4de207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &448752245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2250,6 +2262,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdeeec62fd9471b4ca5c880f9769d1b2, type: 3}
+--- !u!23 &947909910 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8970252905940950936, guid: 9972be14dadccb447a5373c7b8676675,
+    type: 3}
+  m_PrefabInstance: {fileID: 2025936670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &960424107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5252,6 +5270,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 422035368}
+    - target: {fileID: 6465676268682615962, guid: 3b09386c5ca32254194f93d537d8c4cf,
+        type: 3}
       propertyPath: targetValue
       value: 0.6
       objectReference: {fileID: 0}
@@ -5329,7 +5352,7 @@ PrefabInstance:
         type: 3}
       propertyPath: renderer
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 947909910}
     - target: {fileID: 6465676268700089823, guid: 3b09386c5ca32254194f93d537d8c4cf,
         type: 3}
       propertyPath: roomEndBoundary.x
