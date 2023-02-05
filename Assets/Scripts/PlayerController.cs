@@ -155,7 +155,8 @@ namespace DNA
 
         void UpdateIndicator(float power)
         {
-            powerIndicator.fillAmount = power;
+            References.ingameHud.JumpPowerBar.Fill = power;
+            /*powerIndicator.fillAmount = power;*/
             arrow.SetScale(1 + power);
         }
 
