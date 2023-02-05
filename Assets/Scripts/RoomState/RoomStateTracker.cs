@@ -236,7 +236,7 @@ namespace DNA
             pixels.Dispose();
 
             textureGenerator.UpdateFloorMaterial();
-            textureGenerator.WriteToFile();
+            /*textureGenerator.WriteToFile();*/
         }
 
         public void ApplyPlayerStartImpact(Vector3 impactPosition)
@@ -265,7 +265,7 @@ namespace DNA
             pixels.Dispose();
 
             textureGenerator.UpdateFloorMaterial();
-            textureGenerator.WriteToFile();
+            /*textureGenerator.WriteToFile();*/
         }
 
         public void ApplyFlamethrowerCircle(Vector3 impactPosition)
