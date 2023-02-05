@@ -8,12 +8,16 @@ namespace DNA
     /// </summary>
     public class TargetSceneLoader : MonoBehaviour
     {
-#if UNITY_EDITOR
+
         private void Awake()
         {
+#if UNITY_EDITOR
             int sceneIndex = LoadingSceneIntegration.otherScene > 0 ? LoadingSceneIntegration.otherScene : 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
-        }
 #endif
+#if UNITY_STANDALONE
+            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+#endif
+        }
     }
 }
