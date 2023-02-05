@@ -28,8 +28,18 @@ namespace DNA
 
         #region Setup
 
+        private void Awake()
+        {
+            // Singleton:
+            if (References.levelProgress == null)
+                References.levelProgress = this;
+            else
+                Destroy(this);
+        }
+
         private void Start()
         {
+
             // Display target indicator in progress bar:
             if (hud != null && hud.ProgressBar != null)
             {

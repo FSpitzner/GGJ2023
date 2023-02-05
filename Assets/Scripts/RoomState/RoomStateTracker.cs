@@ -24,13 +24,16 @@ namespace DNA
         [Header("Gameplay")]
         [SerializeField]
         [Min(1)]
-        private int playerImpactRadius = 1;
+        private int playerImpactRadius = 50;
         [SerializeField]
         [Min(1)]
-        private int flameRadius = 1;
+        private int playerStartImpactRadius = 100;
         [SerializeField]
         [Min(1)]
-        private int bombRadius = 1;
+        private int flameRadius = 20;
+        [SerializeField]
+        [Min(1)]
+        private int bombRadius = 80;
 
         [Header("References")]
         [SerializeField]
@@ -47,6 +50,7 @@ namespace DNA
         private int availableFloorSpots = 0;
         private int overgrownSpots = 0;
         private float overgrownPercentage = 0f;
+        private NativeList<int2> playerStartCircleOffsets;
         private NativeList<int2> playerCircleOffsets;
         private NativeList<int2> flameCircleOffsets;
         private NativeList<int2> bombCircleOffsets;
@@ -74,6 +78,7 @@ namespace DNA
 
             // Pre-calculate offset index values to be accessed to create circular pattern in the array:
             CalculatePlayerCircleOffsets();
+            CalculatePlayerStartCircleOffsets();
             CalculateFlameCircleOffsets();
             CalculateBombCircleOffsets();
         }
@@ -96,6 +101,29 @@ namespace DNA
                         playerCircleOffsets.Add(vec); vec.y = -vec.y; // -i,j
                         playerCircleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
                         playerCircleOffsets.Add(vec);                 // i,-j
+                    }
+                }
+            }
+        }
+
+        private void CalculatePlayerStartCircleOffsets()
+        {
+            // Pre-calculate offset index values to be accessed to create circular pattern in the array:
+            playerStartCircleOffsets = new NativeList<int2>(Allocator.Persistent);
+            int threshold = playerStartImpactRadius * playerStartImpactRadius;
+            int2 vec = new int2();
+            for (int i = 0; i < playerStartImpactRadius; i++)
+            {
+                vec.x = i;
+                for (int j = 0; j < playerStartImpactRadius; j++)
+                {
+                    if (i * i + j * j < threshold)
+                    {
+                        vec.y = j;
+                        playerStartCircleOffsets.Add(vec); vec.x = -vec.x; // i,j
+                        playerStartCircleOffsets.Add(vec); vec.y = -vec.y; // -i,j
+                        playerStartCircleOffsets.Add(vec); vec.x = -vec.x; // -i,-j
+                        playerStartCircleOffsets.Add(vec);                 // i,-j
                     }
                 }
             }
@@ -155,6 +183,7 @@ namespace DNA
         {
             states.Dispose();
             playerCircleOffsets.Dispose();
+            playerStartCircleOffsets.Dispose();
             flameCircleOffsets.Dispose();
             bombCircleOffsets.Dispose();
         }
@@ -201,6 +230,35 @@ namespace DNA
                 targetState = RoomState.OVERGROWN_FLOOR
             };
             JobHandle handle = job.Schedule(playerCircleOffsets.Length, 10);
+            handle.Complete();
+            textureGenerator.Pixels = pixels.ToArray();
+            /*textureGenerator.PixelData = pixels;*/
+            pixels.Dispose();
+
+            textureGenerator.UpdateFloorMaterial();
+            textureGenerator.WriteToFile();
+        }
+
+        public void ApplyPlayerStartImpact(Vector3 impactPosition)
+        {
+            // Remap impact position to array index:
+            int2 impactIndex = PositionToGrid(impactPosition);
+
+            // Mark impact spot as overgrown:
+            /*OvergrowSpot(impactIndex.x, impactIndex.y;*/
+            // Iterate all spots that are inside the given circle radius around the impact:
+            NativeArray<Color> pixels = new NativeArray<Color>(textureGenerator.Pixels, Allocator.TempJob);
+            CircleCalculationJob job = new CircleCalculationJob
+            {
+                states = states,
+                centerIndex = impactIndex,
+                offsets = playerStartCircleOffsets,
+                dimensions = dimensions,
+                pixels = pixels,
+                originState = RoomState.CLEAN_FLOOR,
+                targetState = RoomState.OVERGROWN_FLOOR
+            };
+            JobHandle handle = job.Schedule(playerStartCircleOffsets.Length, 10);
             handle.Complete();
             textureGenerator.Pixels = pixels.ToArray();
             /*textureGenerator.PixelData = pixels;*/

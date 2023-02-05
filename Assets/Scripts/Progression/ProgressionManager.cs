@@ -18,6 +18,10 @@ namespace DNA
         private int currentLevel = 0;
         #endregion
 
+        #region Properties
+        public int CurrentLevel { get { return currentLevel; } }
+        #endregion
+
         #region Setup
 
         void Awake()

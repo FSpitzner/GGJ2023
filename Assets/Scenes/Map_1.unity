@@ -1256,8 +1256,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689745700}
-  m_LocalRotation: {x: 0.5127866, y: 0.000000012792888, z: -0.000000007641116, w: 0.85851616}
-  m_LocalPosition: {x: -22, y: 14, z: 16}
+  m_LocalRotation: {x: 0.5127866, y: 0.0000000127928885, z: -0.000000007641117, w: 0.85851616}
+  m_LocalPosition: {x: -17.62, y: 14, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5376,7 +5376,7 @@ PrefabInstance:
     - target: {fileID: 5893203654495883903, guid: 16412e92301b2b541a84da6638c15a94,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22
+      value: -17.62
       objectReference: {fileID: 0}
     - target: {fileID: 5893203654495883903, guid: 16412e92301b2b541a84da6638c15a94,
         type: 3}
@@ -5806,6 +5806,11 @@ PrefabInstance:
         type: 3}
       propertyPath: roomStartBoundary.y
       value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6465676268700089823, guid: 3b09386c5ca32254194f93d537d8c4cf,
+        type: 3}
+      propertyPath: playerStartImpactRadius
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6502,7 +6507,7 @@ PrefabInstance:
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22
+      value: -17.62
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
@@ -6527,12 +6532,12 @@ PrefabInstance:
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000012792888
+      value: 0.0000000127928885
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000007641116
+      value: -0.000000007641117
       objectReference: {fileID: 0}
     - target: {fileID: 5833844205756055465, guid: 694869cbe7680614bba4aa864d2a4f2f,
         type: 3}

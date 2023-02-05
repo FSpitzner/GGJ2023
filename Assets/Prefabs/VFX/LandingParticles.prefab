@@ -63,6 +63,9 @@ VisualEffect:
       - m_Value: 2.5
         m_Name: GravityMultiplier
         m_Overridden: 1
+      - m_Value: 2
+        m_Name: DustRange
+        m_Overridden: 1
     m_Vector2f:
       m_Array:
       - m_Value: {x: 3, y: 5}
@@ -118,12 +121,73 @@ VisualEffect:
           m_RotationOrder: 4
         m_Name: SizeOverLifetime
         m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 3
+            inSlope: 5.449021
+            outSlope: 5.449021
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.07494607
+          - serializedVersion: 3
+            time: 0.9852295
+            value: 4
+            inSlope: 13.084165
+            outSlope: 13.084165
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.032125045
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: DustSizeOverLifetime
+        m_Overridden: 1
     m_Gradient:
-      m_Array: []
+      m_Array:
+      - m_Value:
+          serializedVersion: 2
+          key0: {r: 0.26027304, g: 1.3877441, b: 0.30585235, a: 0}
+          key1: {r: 0.13124104, g: 0.6941315, b: 0.15156431, a: 0.078431375}
+          key2: {r: 0.5070676, g: 0.8301887, b: 0.44250622, a: 0.078431375}
+          key3: {r: 0, g: 0, b: 0, a: 0}
+          key4: {r: 0, g: 0, b: 0, a: 0}
+          key5: {r: 0, g: 0, b: 0, a: 0}
+          key6: {r: 0, g: 0, b: 0, a: 0}
+          key7: {r: 0, g: 0, b: 0, a: 0}
+          ctime0: 0
+          ctime1: 8481
+          ctime2: 65535
+          ctime3: 0
+          ctime4: 0
+          ctime5: 0
+          ctime6: 0
+          ctime7: 0
+          atime0: 0
+          atime1: 6554
+          atime2: 20046
+          atime3: 65535
+          atime4: 0
+          atime5: 0
+          atime6: 0
+          atime7: 0
+          m_Mode: 0
+          m_ColorSpace: 1
+          m_NumColorKeys: 3
+          m_NumAlphaKeys: 4
+        m_Name: DustColorOverLifetime
+        m_Overridden: 1
     m_NamedObject:
       m_Array:
       - m_Value: {fileID: 2800000, guid: 6d3ff56c877da3043a7f3a8e8b0708e6, type: 3}
         m_Name: ParticleTexture
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: c8364bae0c2eb7642ac6caff3af74888, type: 3}
+        m_Name: DustTexture
         m_Overridden: 1
     m_Bool:
       m_Array: []
