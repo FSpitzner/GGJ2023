@@ -51,7 +51,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 3
+      - m_Value: 4
         m_Name: StrengthWidth
         m_Overridden: 1
       - m_Value: 0.4
@@ -65,7 +65,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector2f:
       m_Array:
-      - m_Value: {x: 10, y: 12}
+      - m_Value: {x: 3, y: 5}
         m_Name: StrengthHeight
         m_Overridden: 1
     m_Vector3f:
@@ -76,7 +76,7 @@ VisualEffect:
       m_Array: []
     m_Int:
       m_Array:
-      - m_Value: 100
+      - m_Value: 200
         m_Name: Spawn Count
         m_Overridden: 1
     m_Matrix4x4f:
@@ -88,9 +88,9 @@ VisualEffect:
           m_Curve:
           - serializedVersion: 3
             time: 0
-            value: 0
-            inSlope: 2
-            outSlope: 2
+            value: 0.5
+            inSlope: 1
+            outSlope: 1
             tangentMode: 34
             weightedMode: 0
             inWeight: 0
@@ -98,8 +98,8 @@ VisualEffect:
           - serializedVersion: 3
             time: 0.5
             value: 1
-            inSlope: 0.5
-            outSlope: 0.5
+            inSlope: 0
+            outSlope: 0
             tangentMode: 34
             weightedMode: 0
             inWeight: 0.33333334
