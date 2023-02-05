@@ -51,7 +51,8 @@ MonoBehaviour:
   navMeshAgent: {fileID: 7984665306363827885}
   roomStateTracker: {fileID: 0}
   bombDropPoint: {fileID: 4275643288623134844}
-  bombPrefab: {fileID: 0}
+  bombPrefab: {fileID: 501423092803085377, guid: b7a523d9e5d408d4e944a754a705186b,
+    type: 3}
   floorMask:
     serializedVersion: 2
     m_Bits: 64
