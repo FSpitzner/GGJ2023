@@ -53,6 +53,9 @@ namespace DNA
             owntransform = transform;
             projectileTransform = projectile.transform;
             groundRay = new Ray(projectileTransform.position, Vector3.down);
+
+            // Apply initial overgrowth radius the player starts at:
+            roomStateTracker.ApplyPlayerStartImpact(transform.position);
         }
 
         void Update()
@@ -117,6 +120,10 @@ namespace DNA
 
         void Jump(Vector3 direction, float power)
         {
+            // Tell the tutorial UI that the player has moved:
+            if (References.ingameHud != null)
+                References.ingameHud.ControlsPanel.RegisterPlayerMovement();
+
             StartCoroutine(JumpNumerator(direction, power));
         }
 

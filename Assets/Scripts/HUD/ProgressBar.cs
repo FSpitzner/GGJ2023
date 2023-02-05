@@ -80,6 +80,9 @@ namespace DNA
 
         private void Start()
         {
+            barFill.fillAmount = 1f;
+            Percentage = 1f;
+            percentageText.text = string.Format("{0}{1}", 100f, percentageSuffix);
             Invoke(nameof(InitializeAnimations), startAnimationDelay);
         }
 
@@ -96,10 +99,7 @@ namespace DNA
             scaleSequence.Append(barTransform.DOScale(targetIndicatorIncreasedScale, 0.5f).SetEase(Ease.OutExpo));
 
             // Empty bar with animation:
-            barFill.fillAmount = 1f;
-            Percentage = 1f;
-            percentageText.text = string.Format("{0}{1}", 100f, percentageSuffix);
-            barFill.DOFillAmount(0f, 0.6f).SetEase(Ease.InOutExpo).SetDelay(0.5f)
+            barFill.DOFillAmount(References.levelProgress != null ? References.levelProgress.Progress : 0f, 0.6f).SetEase(Ease.InOutExpo).SetDelay(0.5f)
                 .OnUpdate(() => percentageText.text = string.Format("{0}{1}", Mathf.Floor(100f * barFill.fillAmount).ToString(), percentageSuffix))
                 .OnComplete(() => percentageText.transform.DOShakePosition(0.25f, 5f));
 

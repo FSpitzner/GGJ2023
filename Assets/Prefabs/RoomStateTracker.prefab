@@ -89,8 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetValue: 0.5
-  percentageBar: {fileID: 0}
-  completionPanel: {fileID: 0}
+  hud: {fileID: 0}
 --- !u!1 &6465676268700089820
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +142,7 @@ MonoBehaviour:
   roomEndBoundary: {x: 19, y: 19}
   scanDensity: 10
   playerImpactRadius: 50
+  playerStartImpactRadius: 75
   flameRadius: 20
   bombRadius: 80
   scanner: {fileID: 6465676268700089822}
