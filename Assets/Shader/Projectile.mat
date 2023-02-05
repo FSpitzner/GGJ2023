@@ -63,10 +63,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _MovementStrength: 0.18
+    - _MovementStrength: 0.38
     - _MovementThreshhold: 1.34
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SineSpeed: 10
+    - _SineSpeed: 13
     m_Colors: []
   m_BuildTextureStacks: []
