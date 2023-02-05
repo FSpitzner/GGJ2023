@@ -47,7 +47,7 @@ namespace DNA
             }
 
             // Write texture to file for debug purposes:
-            WriteToFile();
+            //WriteToFile();
         }
 
         private Color CalculateStateColor(RoomState state)

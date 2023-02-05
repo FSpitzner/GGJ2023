@@ -11,6 +11,7 @@ namespace DNA
 
         [SerializeField] InputActionReference directionInput = null;
         [SerializeField] InputActionReference jumpButton = null;
+        [SerializeField] InputActionReference escapeButton = null;
 
         public Vector2 Direction { get; private set; }
         public bool JumpActive { get; private set; }
@@ -19,12 +20,14 @@ namespace DNA
         {
             directionInput.action.Enable();
             jumpButton.action.Enable();
+            escapeButton.action.Enable();
         }
 
         private void OnDestroy()
         {
             directionInput.action.Disable();
             jumpButton.action.Disable();
+            escapeButton.action.Disable();
         }
 
         void Update()
@@ -37,6 +40,14 @@ namespace DNA
             if (jumpButton != null)
             {
                 JumpActive = jumpButton.ToInputAction().ReadValue<float>() > 0f;
+            }
+
+            if(escapeButton != null)
+            {
+                if(escapeButton.ToInputAction().ReadValue<float>() > 0f)
+                {
+                    Application.Quit();
+                }
             }
         }
     }
